@@ -3,112 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA FF - ELITE HUB v4.0</title>
+    <title>ASTRA FF - ELITE HUB</title>
+    
     <link rel="stylesheet" href="style.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2 class="logo-text">ASTRA <span>FF</span></h2>
-            <p class="version-tag">ELITE HUB v4.0</p>
-        </div>
-        
-        <div class="nav-links">
-            <div class="nav-item active" onclick="showView('setup')">
-                <i class="ph-bold ph-gear"></i> NOVA DIÁRIA
-            </div>
-            <div class="nav-item" onclick="showView('pix')">
-                <i class="ph-bold ph-currency-dollar"></i> GESTÃO & PIX
-            </div>
-            <div class="nav-item" onclick="showView('busca')">
-                <i class="ph-bold ph-magnifying-glass"></i> BUSCA RÁPIDA
-            </div>
-            <div class="nav-item" onclick="showView('queda')">
-                <i class="ph-bold ph-game-controller"></i> MOTOR DE QUEDAS
-            </div>
-        </div>
-
-        <div class="sidebar-footer">
-            <button class="btn-reset-danger" onclick="resetSystem()">
-                <i class="ph-bold ph-warning"></i> RESETAR TUDO
-            </button>
-        </div>
-    </nav>
-
     <header class="header">
-        <div class="header-left">
-            <div class="menu-btn" onclick="toggleMenu()"><i class="ph-bold ph-list"></i></div>
-            <div class="hud-info">
-                <span class="hud-label">SALA</span>
-                <span id="hud-round-val" class="hud-value">01</span>
-            </div>
-        </div>
-        <div class="logo-central">ASTRA FF</div>
+        <div class="menu-btn" onclick="toggleMenu()"><i class="ph-bold ph-list"></i></div>
+        <div class="logo-central">ASTRA <span>FF</span></div>
         <div class="header-right">
             <div id="digital-clock">00:00</div>
         </div>
     </header>
 
-    <div class="main-container">
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-logo">MENU <span>ASTRA</span></h2>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-item" onclick="showView('setup')"><i class="ph-bold ph-gear"></i> Nova Diária</div>
+            <div class="sidebar-item" onclick="showView('pix')"><i class="ph-bold ph-currency-dollar"></i> Gestão / PIX</div>
+            <div class="sidebar-item" onclick="showView('queda')"><i class="ph-bold ph-game-controller"></i> Motor de Queda</div>
+            <hr class="divider">
+            <div class="sidebar-item btn-reset" onclick="location.reload()"><i class="ph-bold ph-warning"></i> Resetar Tudo</div>
+        </div>
+    </nav>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <div class="container">
         
         <section id="view-setup" class="view active">
-            <div class="card-glass intro-card">
-                <h3><i class="ph-bold ph-rocket-launch"></i> INICIAR OPERAÇÃO</h3>
-                <p>Selecione o modo e cole a lista master para gerar o ecossistema.</p>
+            <div class="card-main">
+                <h3 class="title-view"><i class="ph-bold ph-rocket-launch"></i> CONFIGURAÇÃO</h3>
+                <p class="subtitle">Escolha o modo para definir o limite de times:</p>
                 
-                <div class="mode-grid">
-                    <button class="mode-btn active" onclick="setAppMode('SOLO', this)">SOLO</button>
-                    <button class="mode-btn" onclick="setAppMode('DUO', this)">DUO</button>
-                    <button class="mode-btn" onclick="setAppMode('SQUAD', this)">SQUAD</button>
+                <div class="mode-selector">
+                    <button class="m-btn active" onclick="setMode('SOLO', 48, this)">SOLO (48)</button>
+                    <button class="m-btn" onclick="setMode('DUO', 24, this)">DUO (24)</button>
+                    <button class="m-btn" onclick="setMode('SQUAD', 12, this)">SQUAD (12)</button>
                 </div>
 
-                <textarea id="master-list-input" placeholder="01- TIME A&#10;02- TIME B..."></textarea>
+                <textarea id="lista-raw" placeholder="Cole sua lista aqui...&#10;Ex:&#10;01- LOUD&#10;02- PAIN..."></textarea>
                 
-                <button class="btn-primary-action" onclick="cadastrarTimes()">
-                    CADASTRAR E GERAR SLOTS
-                </button>
+                <button class="btn-next" onclick="processarLista()">CADASTRAR E AVANÇAR <i class="ph-bold ph-arrow-right"></i></button>
             </div>
         </section>
 
         <section id="view-pix" class="view">
-            <div class="card-glass">
-                <h3><i class="ph-bold ph-users-three"></i> GESTÃO DE SLOTS</h3>
-                <p class="subtitle">Controle de pagamentos e identificação de nicks.</p>
-                <div id="pix-container" class="slots-list">
+            <div class="card-main">
+                <h3 class="title-view"><i class="ph-bold ph-users-three"></i> GESTÃO & PIX</h3>
+                <div id="pix-list" class="scroll-area">
                     </div>
-            </div>
-        </section>
-
-        <section id="view-busca" class="view">
-            <div class="card-glass">
-                <h3><i class="ph-bold ph-magnifying-glass"></i> LOCALIZADOR</h3>
-                <input type="text" id="search-input" placeholder="Digite o nome do time ou nick..." onkeyup="handleSearch()">
-                <div id="search-results-area" class="results-grid"></div>
+                <button class="btn-next" onclick="showView('queda')">ABRIR MOTOR DE QUEDAS <i class="ph-bold ph-game-controller"></i></button>
             </div>
         </section>
 
         <section id="view-queda" class="view">
-            <div class="motor-header">
-                <h3 id="motor-title">SALA #01 - LANÇAMENTO</h3>
-                <div class="stat-badge" id="stats-summary">0/12 PAGOS</div>
+            <div class="motor-info-bar">
+                <div class="info-badge" id="round-label">QUEDA #1</div>
+                <div class="info-badge" id="limit-label">AGUARDANDO...</div>
             </div>
             
-            <div id="motor-slots-area">
+            <div id="motor-container">
                 </div>
 
-            <div class="action-bar-fixed">
-                <button class="btn-finalize" onclick="processarQueda()">
-                    ENCERRAR QUEDA E SOMAR PONTOS
-                </button>
+            <div class="actions-area">
+                <button class="btn-finalize" onclick="finalizarQueda()">ENCERRAR QUEDA E PONTUAR</button>
             </div>
 
-            <div id="ranking-result-area" class="hidden">
+            <div id="ranking-area" class="hidden">
+                <div id="capture-zone" class="ranking-visual">
+                    <div class="ranking-banner">
+                        <img src="https://i.imgur.com/8f6pS8E.png" alt="" class="logo-ranking"> <h4>RANKING OFICIAL</h4>
+                        <p id="rank-date">DIÁRIA ASTRA FF</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tabela-ranking">
+                            </table>
+                    </div>
                 </div>
+
+                <div class="sharing-grid">
+                    <button class="btn-share wa" onclick="copiarTexto()"><i class="ph-bold ph-whatsapp-logo"></i> COPIAR TEXTO</button>
+                    <button class="btn-share camera" onclick="baixarPrint()"><i class="ph-bold ph-camera"></i> SALVAR FOTO</button>
+                </div>
+            </div>
         </section>
 
     </div>
