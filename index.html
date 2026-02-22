@@ -3,207 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA FF - SAFE MANAGER</title>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>ASTRA FF - ELITE HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #020617; --card: #1e293b; --accent: #fbbf24; 
-            --gold: #f59e0b; --danger: #ef4444; --success: #22c55e;
-        }
+        :root { --bg: #020617; --card: #1e293b; --accent: #fbbf24; --danger: #ef4444; --success: #22c55e; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: #f8fafc; padding-bottom: 60px; }
-        
-        .header { background: linear-gradient(180deg, #1e293b 0%, #020617 100%); padding: 20px 15px; text-align: center; border-bottom: 2px solid var(--accent); margin-bottom: 20px; }
-        .header h1 { font-family: 'Orbitron', sans-serif; letter-spacing: 3px; color: var(--accent); font-size: 1.4rem; }
+        body { background-color: var(--bg); color: #f8fafc; overflow-x: hidden; }
 
-        .container { padding: 10px; max-width: 550px; margin: 0 auto; }
+        /* Header e Menu */
+        .header { 
+            background: #0f172a; padding: 15px; display: flex; 
+            justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100;
+        }
+        .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--accent); }
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent); }
+
+        /* Sidebar Lateral */
+        .sidebar {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+            background: #0f172a; transition: 0.3s; z-index: 200;
+            box-shadow: 10px 0 20px rgba(0,0,0,0.5); padding: 20px;
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-item { 
+            padding: 15px; border-bottom: 1px solid #1e293b; 
+            cursor: pointer; color: #94a3b8; transition: 0.2s;
+        }
+        .sidebar-item:hover { color: var(--accent); background: #1e293b; }
+        .overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; z-index: 150; 
+        }
+
+        /* Áreas de Conteúdo */
+        .container { padding: 15px; max-width: 550px; margin: 0 auto; }
+        .view { display: none; }
+        .view.active { display: block; }
+        
         .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #334155; }
-        h3 { font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 15px; font-size: 0.75rem; text-transform: uppercase; }
-
-        textarea { width: 100%; background: #0f172a; color: #fff; border: 1px solid #475569; padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 10px; }
+        h3 { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; }
         
-        .formato-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .formato-opt { background: #0f172a; border: 1px solid #334155; padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.65rem; font-weight: bold; color: #64748b; }
-        .formato-opt.active { border-color: var(--accent); color: var(--accent); }
-
-        .slot-item { background: #0f172a; border-radius: 10px; margin-bottom: 8px; border: 1px solid #334155; overflow: hidden; transition: 0.3s; }
-        .slot-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .slot-title { font-weight: 800; color: #cbd5e1; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; }
-        .slot-content { padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s; background: #0f172a; }
-        .slot-item.open .slot-content { max-height: 600px; padding: 15px; border-top: 1px solid #1e293b; }
-        .slot-item.open { border-color: var(--accent); }
-
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .full-col { grid-column: span 2; }
-        .label-mini { font-size: 0.6rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block; }
-        input, select { background: #1e293b; border: 1px solid #475569; color: #fff; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; width: 100%; }
-
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; transition: 0.2s; }
-        .btn-main { background: var(--accent); color: #000; margin-top: 10px; }
-        .btn-main:active { transform: scale(0.98); }
-
-        .btn-pay { padding: 3px 8px; border-radius: 4px; font-size: 0.55rem; font-weight: bold; border: none; }
+        input, textarea { 
+            width: 100%; background: #0f172a; border: 1px solid #475569; color: #fff; 
+            padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem;
+        }
+        
+        .btn-pay { padding: 5px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; border: none; cursor: pointer; }
         .pay-ok { background: var(--success); color: white; }
         .pay-no { background: var(--danger); color: white; }
-
-        .table-res { width: 100%; border-collapse: collapse; background: #0f172a; border-radius: 8px; overflow: hidden; }
-        .table-res th { padding: 10px; color: #64748b; background: #1e293b; text-align: center; font-size: 0.6rem; }
-        .table-res td { padding: 12px 8px; text-align: center; border-bottom: 1px solid #1e293b; font-weight: 700; font-size: 0.75rem; }
-
-        .badge-queda { background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>ASTRA FF ELITE</h1></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-<div class="container">
-    <div class="card" id="step-1">
-        <h3>⚙️ CONFIGURAR DIÁRIA</h3>
-        <div class="formato-grid">
-            <div class="formato-opt active" id="opt-SOLO" onclick="setFormato('SOLO')">SOLO</div>
-            <div class="formato-opt" id="opt-DUO" onclick="setFormato('DUO')">DUO</div>
-            <div class="formato-opt" id="opt-SQUAD" onclick="setFormato('SQUAD')">SQUAD</div>
+    <nav class="sidebar" id="sidebar">
+        <h2 style="font-family: 'Orbitron'; color: var(--accent); margin-bottom: 20px; font-size: 1.2rem;">SISTEMA ASTRA</h2>
+        <div class="sidebar-item" onclick="showView('setup')">⚙️ Nova Diária</div>
+        <div class="sidebar-item" onclick="showView('pix')">💰 Gestão Financeira / PIX</div>
+        <div class="sidebar-item" onclick="showView('busca')">🔍 Buscar Jogador</div>
+        <div class="sidebar-item" onclick="showView('queda')">🎮 Lançar Queda</div>
+        <div class="sidebar-item" style="color: var(--danger); margin-top: 20px;" onclick="location.reload()">⚠️ Resetar Tudo</div>
+    </nav>
+
+    <header class="header">
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="logo">ASTRA FF</div>
+        <div style="width: 20px;"></div>
+    </header>
+
+    <div class="container">
+        <div id="view-setup" class="view active">
+            <div class="card">
+                <h3>1. INICIAR DIÁRIA</h3>
+                <p style="font-size: 0.7rem; color: #94a3b8;">Cole a lista de times abaixo:</p>
+                <textarea id="input-lista-master" rows="10" placeholder="01- TIME ALPHA&#10;02- TIME BRAVO..."></textarea>
+                <button onclick="processarLista()" style="width:100%; padding:15px; margin-top:15px; background:var(--accent); border:none; border-radius:8px; font-weight:bold; cursor:pointer;">CADASTRAR TIMES</button>
+            </div>
         </div>
-        <textarea id="input-lista" rows="8" placeholder="01 - TIME A&#10;02 - TIME B..."></textarea>
-        <button class="btn btn-main" onclick="initApp()">INICIAR PAINEL</button>
-    </div>
 
-    <div class="card" id="step-2" style="display:none">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
-            <h3 id="titulo-queda">QUEDA 1</h3>
-            <span id="contador-quedas" class="badge-queda">SALA 1 DE 6</span>
-        </div>
-        
-        <div id="slots-container"></div>
-        
-        <div style="margin-top:20px; border-top: 1px solid #334155; padding-top:15px;">
-            <button class="btn btn-main" style="background:var(--success);" onclick="confirmarSalvar()">✅ ENCERRAR QUEDA E AVANÇAR</button>
-            <button onclick="finalizarTudo()" style="color:#64748b; background:none; border:none; width:100%; margin-top:15px; cursor:pointer; font-size:0.6rem; text-decoration: underline;">CANCELAR DIÁRIA / LIMPAR TUDO</button>
-        </div>
-    </div>
-
-    <div class="card" id="step-3" style="display:none">
-        <h3>📊 CLASSIFICAÇÃO GERAL</h3>
-        <div id="print-area" style="background:#020617; padding:10px; border-radius:10px;">
-            <table class="table-res">
-                <thead><tr><th>#</th><th style="text-align:left">TIME / JOGADORES</th><th>K</th><th>PTS</th></tr></thead>
-                <tbody id="corpo-tabela"></tbody>
-            </table>
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
-            <button class="btn btn-main" style="background:#22c55e; font-size:0.65rem" onclick="shareZap()">WHATSAPP</button>
-            <button class="btn btn-main" style="background:#8b5cf6; font-size:0.65rem" onclick="shareImg()">GERAR PRINT</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    let times = []; let rodada = 1; let formato = 'SOLO';
-    const ptsLBFF = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
-
-    function setFormato(f) {
-        formato = f;
-        document.querySelectorAll('.formato-opt').forEach(el => el.classList.remove('active'));
-        document.getElementById(`opt-${f}`).classList.add('active');
-    }
-
-    function toggleSlot(el) { el.parentElement.classList.toggle('open'); }
-
-    function initApp() {
-        const val = document.getElementById('input-lista').value;
-        if(!val.trim()) return;
-        times = val.split('\n').filter(l => l.trim()).map((l, i) => ({
-            id: i, nome: l.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
-            jogadores: "", kills: 0, pts: 0, booyahs: 0, dq: false, pago: false, pix: ""
-        }));
-        document.getElementById('step-1').style.display = 'none';
-        document.getElementById('step-2').style.display = 'block';
-        document.getElementById('step-3').style.display = 'block';
-        renderSlots(); renderTable();
-    }
-
-    function renderSlots() {
-        document.getElementById('titulo-queda').innerText = `QUEDA ${rodada}`;
-        document.getElementById('contador-quedas').innerText = `SALA ${rodada} ATIVA`;
-        document.getElementById('slots-container').innerHTML = times.map(t => `
-            <div class="slot-item">
-                <div class="slot-header" onclick="toggleSlot(this)">
-                    <div class="slot-title"><span>▼</span> ${t.nome}</div>
-                    <button class="btn-pay ${t.pago?'pay-ok':'pay-no'}" onclick="event.stopPropagation(); togglePay(${t.id})">
-                        ${t.pago?'PAGO':'PENDENTE'}
-                    </button>
-                </div>
-                <div class="slot-content">
-                    <div class="grid-inputs">
-                        <div class="full-col"><span class="label-mini">Jogadores</span>
-                        <input type="text" value="${t.jogadores}" onchange="times[${t.id}].jogadores = this.value"></div>
-                        <div><span class="label-mini">Status</span>
-                        <select id="st_${t.id}"><option value="NORMAL">NORMAL</option><option value="WO">W.O.</option><option value="DQ">DQ</option></select></div>
-                        <div><span class="label-mini">Punição</span><input type="number" id="pun_${t.id}" placeholder="0"></div>
-                        <div><span class="label-mini">Posição</span><input type="number" id="pos_${t.id}" placeholder="1-12"></div>
-                        <div><span class="label-mini">Kills</span><input type="number" id="kil_${t.id}" placeholder="0"></div>
-                    </div>
+        <div id="view-pix" class="view">
+            <div class="card">
+                <h3>2. GESTÃO FINANCEIRA & SLOTS</h3>
+                <p style="font-size: 0.7rem; color: #94a3b8; margin-bottom: 15px;">Defina quem pagou e os nicks dos jogadores.</p>
+                <div id="pix-list">
+                    <p style="text-align:center; color:#475569; font-size:0.8rem;">Cadastre a lista primeiro.</p>
                 </div>
             </div>
-        `).join('');
-    }
+        </div>
 
-    function confirmarSalvar() {
-        if(confirm(`Deseja ENCERRAR a Queda ${rodada} e somar os pontos?\nEsta ação não pode ser desfeita.`)) {
-            processarQueda();
+        <div id="view-busca" class="view">
+            <div class="card">
+                <h3>🔍 BUSCA RÁPIDA</h3>
+                <input type="text" id="searchBar" placeholder="Pesquisar por Time ou Jogador..." onkeyup="renderizarBusca()">
+                <div id="search-results" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <div id="view-queda" class="view">
+            <div class="card">
+                <h3>🎮 MOTOR DE QUEDAS</h3>
+                <p id="aviso-queda" style="text-align:center; padding:20px; color:#475569;">Aguardando Parte 3 do Código...</p>
+                <div id="motor-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- ESTADO GLOBAL (DATABASE) ---
+        let db = {
+            config: { formato: 'SQUAD' },
+            times: [],
+            rodadaAtual: 1
+        };
+
+        // --- CONTROLE DE NAVEGAÇÃO ---
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            const overlay = document.getElementById('overlay');
+            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
         }
-    }
 
-    function processarQueda() {
-        times.forEach(t => {
-            const st = document.getElementById(`st_${t.id}`).value;
-            const pun = parseInt(document.getElementById(`pun_${t.id}`).value) || 0;
-            if(st === "NORMAL") {
-                const pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
-                const kil = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
-                t.pts += (ptsLBFF[pos] || 0) + kil - pun;
-                t.kills += kil;
-                if(pos === 1) t.booyahs++;
-            } else {
-                if(st === "DQ") t.dq = true;
-                t.pts -= pun;
-            }
-        });
-        rodada++;
-        renderSlots(); renderTable();
-        window.scrollTo({top: 0, behavior: 'smooth'});
-        alert(`Queda ${rodada-1} processada com sucesso!`);
-    }
+        function showView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + viewName).classList.add('active');
+            if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
+        }
 
-    function renderTable() {
-        const sorted = [...times].sort((a,b) => b.pts - a.pts || b.booyahs - a.booyahs || b.kills - a.kills);
-        document.getElementById('corpo-tabela').innerHTML = sorted.map((t, i) => `
-            <tr style="${t.dq?'opacity:0.4':''}">
-                <td style="color:${i<3?'var(--gold)':'#64748b'}">${i+1}º</td>
-                <td style="text-align:left">
-                    <div style="color:#fff">${t.nome} ${'🏆'.repeat(t.booyahs)}</div>
-                    <div style="font-size:0.5rem; color:#64748b;">${t.jogadores}</div>
-                </td>
-                <td>${t.kills}</td>
-                <td style="color:var(--accent)">${t.pts}</td>
-            </tr>
-        `).join('');
-    }
+        // --- LÓGICA DE DADOS (PARTE 2) ---
+        function processarLista() {
+            const listaRaw = document.getElementById('input-lista-master').value;
+            if(!listaRaw.trim()) return alert("Insira a lista de times!");
 
-    function togglePay(id) { times[id].pago = !times[id].pago; renderSlots(); }
-    function shareZap() {
-        let txt = `🏆 *ASTRA FF* 🏆\n\n`;
-        [...times].sort((a,b) => b.pts - a.pts).forEach((t, i) => txt += `${i+1}º *${t.nome}* | ${t.pts} pts\n`);
-        navigator.clipboard.writeText(txt); alert("Copiado!");
-    }
-    function shareImg() {
-        html2canvas(document.getElementById('print-area'), {backgroundColor:'#020617'}).then(c => {
-            const l = document.createElement('a'); l.download = 'tabela.png'; l.href = c.toDataURL(); l.click();
-        });
-    }
-    function finalizarTudo() { if(confirm("Deseja apagar tudo e voltar ao início?")) location.reload(); }
-</script>
+            db.times = listaRaw.split('\n').filter(l => l.trim()).map((linha, i) => {
+                return {
+                    id: i,
+                    nome: linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
+                    jogadores: "",
+                    pix: "",
+                    pago: false,
+                    killsTotal: 0,
+                    ptsTotal: 0,
+                    booyahs: 0,
+                    dq: false
+                };
+            });
+
+            renderizarGestaoFinanceira();
+            alert("Sucesso! Vá em 'Gestão Financeira' no menu lateral para organizar os nicks e PIX.");
+            showView('pix');
+        }
+
+        function renderizarGestaoFinanceira() {
+            const container = document.getElementById('pix-list');
+            if(db.times.length === 0) return;
+            
+            container.innerHTML = db.times.map(t => `
+                <div class="card" style="background:#0f172a; margin-bottom:10px; border-left: 4px solid ${t.pago ? 'var(--success)' : 'var(--danger)'}">
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <span style="font-weight:800; font-size:0.8rem;">${t.nome}</span>
+                        <button class="btn-pay ${t.pago ? 'pay-ok' : 'pay-no'}" onclick="alternarPagamento(${t.id})">
+                            ${t.pago ? 'PAGO' : 'PENDENTE'}
+                        </button>
+                    </div>
+                    <input type="text" placeholder="PIX do Time" value="${t.pix}" onchange="db.times[${t.id}].pix = this.value">
+                    <input type="text" placeholder="Nicks (Thur, Bak...)" value="${t.jogadores}" onchange="db.times[${t.id}].jogadores = this.value">
+                </div>
+            `).join('');
+        }
+
+        function alternarPagamento(id) {
+            db.times[id].pago = !db.times[id].pago;
+            renderizarGestaoFinanceira();
+        }
+
+        function renderizarBusca() {
+            const list = document.getElementById('search-results');
+            const termo = document.getElementById('searchBar').value.toUpperCase();
+            if(!termo) { list.innerHTML = ""; return; }
+
+            const filtrados = db.times.filter(t => t.nome.includes(termo) || t.jogadores.toUpperCase().includes(termo));
+
+            list.innerHTML = filtrados.map(t => `
+                <div style="padding:10px; background:#1e293b; border-radius:8px; margin-bottom:5px; border:1px solid #334155">
+                    <div style="color:var(--accent); font-weight:bold; font-size:0.8rem">${t.nome}</div>
+                    <div style="font-size:0.65rem; color:#94a3b8">JOGADORES: ${t.jogadores || 'Não informados'}</div>
+                </div>
+            `).join('');
+        }        // --- MOTOR DE QUEDAS (LOGICA RETRÁTIL) ---
+        // Adicionando observador para carregar o motor quando abrir a view
+        const originalShowView = showView;
+        showView = function(viewName) {
+            originalShowView(viewName);
+            if(viewName === 'queda') renderizarMotorQuedas();
+        };
+
+        function renderizarMotorQuedas() {
+            const container = document.getElementById('motor-container');
+            const aviso = document.getElementById('aviso-queda');
+            if(db.times.length === 0) return;
+            aviso.style.display = "none";
+
+            container.innerHTML = `
+                <div style="text-align:center; margin-bottom:15px">
+                    <span style="background:var(--accent); color:#000; padding:5px 10px; border-radius:5px; font-weight:900; font-size:0.7rem">
+                        SALA ${db.rodadaAtual} ATIVA
+                    </span>
+                </div>
+            ` + db.times.map(t => `
+                <div class="card" style="background:#0f172a; padding:10px; margin-bottom:8px; border:1px solid #334155" id="slot-${t.id}">
+                    <div style="display:flex; justify-content:space-between; cursor:pointer" onclick="const s = this.nextElementSibling; s.style.display = s.style.display === 'none' ? 'grid' : 'none'">
+                        <span style="font-weight:800; font-size:0.8rem">▼ ${t.nome}</span>
+                        <span style="color:var(--accent); font-size:0.7rem">${t.ptsTotal} PTS</span>
+                    </div>
+                    <div class="grid-inputs" style="display:none; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px">
+                        <div><span style="font-size:0.55rem; color:#94a3b8">STATUS</span>
+                            <select id="st_${t.id}" style="padding:5px; font-size:0.7rem">
+                                <option value="NORMAL">NORMAL</option><option value="WO">W.O.</option><option value="DQ">DQ</option>
+                            </select>
+                        </div>
+                        <div><span style="font-size:0.55rem; color:#94a3b8">PUNIÇÃO</span>
+                            <input type="number" id="pun_${t.id}" placeholder="0" style="padding:5px; margin:0; font-size:0.7rem">
+                        </div>
+                        <div><span style="font-size:0.55rem; color:#94a3b8">POSIÇÃO</span>
+                            <input type="number" id="pos_${t.id}" placeholder="1-12" style="padding:5px; margin:0; font-size:0.7rem">
+                        </div>
+                        <div><span style="font-size:0.55rem; color:#94a3b8">KILLS</span>
+                            <input type="number" id="kil_${t.id}" placeholder="0" style="padding:5px; margin:0; font-size:0.7rem">
+                        </div>
+                    </div>
+                </div>
+            `).join('') + `
+                <button onclick="confirmarQueda()" style="width:100%; padding:15px; background:var(--success); border:none; border-radius:8px; color:white; font-weight:bold; margin-top:10px; cursor:pointer">
+                    ENCERRAR QUEDA ${db.rodadaAtual}
+                </button>
+                <div id="print-area" style="margin-top:20px; background:var(--bg); border-radius:10px; padding:10px"></div>
+            `;
+        }
+
+        function confirmarQueda() {
+            if(!confirm(`Somar pontos da Queda ${db.rodadaAtual}?`)) return;
+            const ptsLBFF = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
+            
+            db.times.forEach(t => {
+                const st = document.getElementById(`st_${t.id}`).value;
+                const pun = parseInt(document.getElementById(`pun_${t.id}`).value) || 0;
+                if(st === "NORMAL") {
+                    const pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
+                    const kil = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
+                    t.ptsTotal += (ptsLBFF[pos] || 0) + kil - pun;
+                    t.killsTotal += kil;
+                    if(pos === 1) t.booyahs++;
+                } else {
+                    if(st === "DQ") t.dq = true;
+                    t.ptsTotal -= pun;
+                }
+            });
+            db.rodadaAtual++;
+            renderizarMotorQuedas();
+            renderizarTabela();
+        }
+
+        function renderizarTabela() {
+            const area = document.getElementById('print-area');
+            const sorted = [...db.times].sort((a,b) => b.ptsTotal - a.ptsTotal || b.booyahs - a.booyahs || b.killsTotal - a.killsTotal);
+            
+            area.innerHTML = `
+                <div style="text-align:center; padding-bottom:10px">
+                    <h4 style="font-family:Orbitron; font-size:0.7rem; color:var(--accent)">CLASSIFICAÇÃO GERAL</h4>
+                </div>
+                <table style="width:100%; border-collapse:collapse; font-size:0.7rem">
+                    <tr style="background:#0f172a; color:#64748b"><th style="padding:8px">#</th><th style="text-align:left">TIME</th><th>K</th><th>PTS</th></tr>
+                    ${sorted.map((t, i) => `
+                        <tr style="border-bottom:1px solid #1e293b; ${t.dq ? 'opacity:0.4' : ''}">
+                            <td style="padding:10px; text-align:center; color:${i<3?'var(--gold)':'white'}">${i+1}º</td>
+                            <td>${t.nome} ${'🏆'.repeat(t.booyahs)}<br><small style="color:#64748b">${t.jogadores}</small></td>
+                            <td style="text-align:center">${t.killsTotal}</td>
+                            <td style="text-align:center; color:var(--accent); font-weight:bold">${t.ptsTotal}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+                <button onclick="copiarTexto()" style="width:100%; margin-top:10px; padding:10px; background:#22c55e; border:none; border-radius:5px; color:white; font-weight:bold; cursor:pointer">COPIAR WHATSAPP</button>
+            `;
+        }
+
+        function copiarTexto() {
+            let txt = `🏆 *ASTRA FF - CLASSIFICAÇÃO* 🏆\n\n`;
+            [...db.times].sort((a,b) => b.ptsTotal - a.ptsTotal).forEach((t, i) => {
+                txt += `${i+1}º *${t.nome}* - ${t.ptsTotal} pts\n`;
+            });
+            navigator.clipboard.writeText(txt);
+            alert("Texto copiado para o WhatsApp!");
+        }
+
+    </script>
 </body>
 </html>
