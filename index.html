@@ -3,14 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA HUB - PREMIUM</title>
+    <title>ASTRA - PREMIUM HUB</title>
     
     <link rel="stylesheet" href="style.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <h2 style="font-family:'Orbitron'; color:var(--accent); margin-bottom:30px;">ASTRA HUB</h2>
+        <div class="sidebar-item" onclick="showView('setup')">⚙️ Iniciar Diária</div>
+        <div class="sidebar-item" onclick="showView('pix')">💰 Finanças & Nicks</div>
+        <div class="sidebar-item" onclick="showView('queda')">🎮 Painel de Pontos</div>
+        <div class="sidebar-item" onclick="showView('busca')">🔍 Busca de Jogadores</div>
+        <div class="sidebar-item" style="color:var(--danger); margin-top:20px" onclick="location.reload()">⚠️ Resetar Tudo</div>
+    </nav>
+
+    <header class="header">
+        <div onclick="toggleMenu()" style="cursor:pointer; font-size:1.5rem">☰</div>
+        <div class="logo">ASTRA<span>.</span></div>
+        <div style="width: 20px;"></div>
+    </header>
+
+    <div class="container">
+        <div id="view-setup" class="view active">
+            <div class="card">
+                <h3>CONFIGURAR LISTA</h3>
+                <textarea id="input-lista" rows="10" placeholder="01- TIME ALPHA&#10;02- TIME BRAVO..."></textarea>
+                <button onclick="processarLista()" class="glow-button" style="width:100%; margin-top:15px;">GERAR SLOTS</button>
+            </div>
+        </div>
+
+        <div id="view-pix" class="view">
+            <div class="card">
+                <h3>GESTÃO DE SLOTS</h3>
+                <div id="pix-list" style="margin-top:15px"></div>
+            </div>
+        </div>
+
+        <div id="view-queda" class="view">
+            <div id="motor-queda"></div>
+            <div id="tabela-resultado" style="margin-top:20px"></div>
+        </div>
+
+        <div id="view-busca" class="view">
+            <div class="card">
+                <input type="text" id="searchBar" placeholder="Buscar Nick ou Time..." onkeyup="buscar()">
+                <div id="search-results" style="margin-top:15px"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutorial">
+        <p id="tuto-text"><strong>Passo 1:</strong> Cole a lista e clique no botão brilhante para começar!</p>
+        <button onclick="proximoTuto()" style="margin-top:10px; background:white; color:black; border:none; padding:5px 10px; border-radius:4px; cursor:pointer">Entendido!</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
