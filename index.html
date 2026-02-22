@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA FF - MINIMAL PRO</title>
+    <title>ASTRA FF - SAFE MANAGER</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -14,11 +14,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg); color: #f8fafc; padding-bottom: 60px; }
         
-        .header { 
-            background: linear-gradient(180deg, #1e293b 0%, #020617 100%);
-            padding: 20px 15px; text-align: center; border-bottom: 2px solid var(--accent);
-            margin-bottom: 20px;
-        }
+        .header { background: linear-gradient(180deg, #1e293b 0%, #020617 100%); padding: 20px 15px; text-align: center; border-bottom: 2px solid var(--accent); margin-bottom: 20px; }
         .header h1 { font-family: 'Orbitron', sans-serif; letter-spacing: 3px; color: var(--accent); font-size: 1.4rem; }
 
         .container { padding: 10px; max-width: 550px; margin: 0 auto; }
@@ -27,18 +23,15 @@
 
         textarea { width: 100%; background: #0f172a; color: #fff; border: 1px solid #475569; padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 10px; }
         
-        /* Botões Formato */
         .formato-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
         .formato-opt { background: #0f172a; border: 1px solid #334155; padding: 8px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 0.65rem; font-weight: bold; color: #64748b; }
         .formato-opt.active { border-color: var(--accent); color: var(--accent); }
 
-        /* Estilo do Slot Retrátil */
         .slot-item { background: #0f172a; border-radius: 10px; margin-bottom: 8px; border: 1px solid #334155; overflow: hidden; transition: 0.3s; }
-        .slot-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #0f172a; }
-        .slot-header:hover { background: #161e2e; }
+        .slot-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .slot-title { font-weight: 800; color: #cbd5e1; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; }
-        .slot-content { padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #0f172a; }
-        .slot-item.open .slot-content { max-height: 500px; padding: 15px; border-top: 1px solid #1e293b; }
+        .slot-content { padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s; background: #0f172a; }
+        .slot-item.open .slot-content { max-height: 600px; padding: 15px; border-top: 1px solid #1e293b; }
         .slot-item.open { border-color: var(--accent); }
 
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -46,27 +39,24 @@
         .label-mini { font-size: 0.6rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block; }
         input, select { background: #1e293b; border: 1px solid #475569; color: #fff; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; width: 100%; }
 
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; transition: 0.2s; }
         .btn-main { background: var(--accent); color: #000; margin-top: 10px; }
+        .btn-main:active { transform: scale(0.98); }
 
         .btn-pay { padding: 3px 8px; border-radius: 4px; font-size: 0.55rem; font-weight: bold; border: none; }
         .pay-ok { background: var(--success); color: white; }
         .pay-no { background: var(--danger); color: white; }
 
-        /* Tabela Final */
-        .table-res { width: 100%; border-collapse: collapse; background: #0f172a; border-radius: 8px; overflow: hidden; font-size: 0.75rem; }
+        .table-res { width: 100%; border-collapse: collapse; background: #0f172a; border-radius: 8px; overflow: hidden; }
         .table-res th { padding: 10px; color: #64748b; background: #1e293b; text-align: center; font-size: 0.6rem; }
-        .table-res td { padding: 12px 8px; text-align: center; border-bottom: 1px solid #1e293b; font-weight: 700; }
+        .table-res td { padding: 12px 8px; text-align: center; border-bottom: 1px solid #1e293b; font-weight: 700; font-size: 0.75rem; }
 
-        .arrow { transition: 0.3s; font-size: 0.6rem; color: #475569; }
-        .slot-item.open .arrow { transform: rotate(180deg); color: var(--accent); }
+        .badge-queda { background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>ASTRA FF PRO</h1>
-</div>
+<div class="header"><h1>ASTRA FF ELITE</h1></div>
 
 <div class="container">
     <div class="card" id="step-1">
@@ -76,20 +66,26 @@
             <div class="formato-opt" id="opt-DUO" onclick="setFormato('DUO')">DUO</div>
             <div class="formato-opt" id="opt-SQUAD" onclick="setFormato('SQUAD')">SQUAD</div>
         </div>
-        <textarea id="input-lista" rows="8" placeholder="01 - TIME ALPHA&#10;02 - TIME BRAVO..."></textarea>
+        <textarea id="input-lista" rows="8" placeholder="01 - TIME A&#10;02 - TIME B..."></textarea>
         <button class="btn btn-main" onclick="initApp()">INICIAR PAINEL</button>
-        <div id="hist-list" style="margin-top:15px"></div>
     </div>
 
     <div class="card" id="step-2" style="display:none">
-        <h3 id="titulo-queda">QUEDA 1</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
+            <h3 id="titulo-queda">QUEDA 1</h3>
+            <span id="contador-quedas" class="badge-queda">SALA 1 DE 6</span>
+        </div>
+        
         <div id="slots-container"></div>
-        <button class="btn btn-main" style="background:#3b82f6;" onclick="processarQueda()">SALVAR RESULTADOS</button>
-        <button onclick="finalizarTudo()" style="color:#64748b; background:none; border:none; width:100%; margin-top:15px; cursor:pointer; font-size:0.6rem;">ENCERRAR DIÁRIA</button>
+        
+        <div style="margin-top:20px; border-top: 1px solid #334155; padding-top:15px;">
+            <button class="btn btn-main" style="background:var(--success);" onclick="confirmarSalvar()">✅ ENCERRAR QUEDA E AVANÇAR</button>
+            <button onclick="finalizarTudo()" style="color:#64748b; background:none; border:none; width:100%; margin-top:15px; cursor:pointer; font-size:0.6rem; text-decoration: underline;">CANCELAR DIÁRIA / LIMPAR TUDO</button>
+        </div>
     </div>
 
     <div class="card" id="step-3" style="display:none">
-        <h3>📊 CLASSIFICAÇÃO</h3>
+        <h3>📊 CLASSIFICAÇÃO GERAL</h3>
         <div id="print-area" style="background:#020617; padding:10px; border-radius:10px;">
             <table class="table-res">
                 <thead><tr><th>#</th><th style="text-align:left">TIME / JOGADORES</th><th>K</th><th>PTS</th></tr></thead>
@@ -113,9 +109,7 @@
         document.getElementById(`opt-${f}`).classList.add('active');
     }
 
-    function toggleSlot(el) {
-        el.parentElement.classList.toggle('open');
-    }
+    function toggleSlot(el) { el.parentElement.classList.toggle('open'); }
 
     function initApp() {
         const val = document.getElementById('input-lista').value;
@@ -127,58 +121,40 @@
         document.getElementById('step-1').style.display = 'none';
         document.getElementById('step-2').style.display = 'block';
         document.getElementById('step-3').style.display = 'block';
-        renderSlots();
+        renderSlots(); renderTable();
     }
 
     function renderSlots() {
         document.getElementById('titulo-queda').innerText = `QUEDA ${rodada}`;
+        document.getElementById('contador-quedas').innerText = `SALA ${rodada} ATIVA`;
         document.getElementById('slots-container').innerHTML = times.map(t => `
             <div class="slot-item">
                 <div class="slot-header" onclick="toggleSlot(this)">
-                    <div class="slot-title">
-                        <span class="arrow">▼</span>
-                        ${t.nome}
-                        ${t.dq ? '<span style="color:red; font-size:0.5rem">[DQ]</span>' : ''}
-                    </div>
+                    <div class="slot-title"><span>▼</span> ${t.nome}</div>
                     <button class="btn-pay ${t.pago?'pay-ok':'pay-no'}" onclick="event.stopPropagation(); togglePay(${t.id})">
                         ${t.pago?'PAGO':'PENDENTE'}
                     </button>
                 </div>
                 <div class="slot-content">
                     <div class="grid-inputs">
-                        <div class="full-col">
-                            <span class="label-mini">Jogadores</span>
-                            <input type="text" placeholder="Nicks..." value="${t.jogadores}" onchange="times[${t.id}].jogadores = this.value">
-                        </div>
-                        <div class="full-col">
-                            <span class="label-mini">Chave PIX</span>
-                            <input type="text" placeholder="PIX..." value="${t.pix}" onchange="times[${t.id}].pix = this.value">
-                        </div>
-                        <div>
-                            <span class="label-mini">Status</span>
-                            <select id="st_${t.id}">
-                                <option value="NORMAL">NORMAL</option><option value="WO">W.O.</option><option value="DQ">DQ</option>
-                            </select>
-                        </div>
-                        <div>
-                            <span class="label-mini">Punição</span>
-                            <input type="number" id="pun_${t.id}" placeholder="Pts">
-                        </div>
-                        <div>
-                            <span class="label-mini">Posição</span>
-                            <input type="number" id="pos_${t.id}" placeholder="1-12">
-                        </div>
-                        <div>
-                            <span class="label-mini">Kills</span>
-                            <input type="number" id="kil_${t.id}">
-                        </div>
+                        <div class="full-col"><span class="label-mini">Jogadores</span>
+                        <input type="text" value="${t.jogadores}" onchange="times[${t.id}].jogadores = this.value"></div>
+                        <div><span class="label-mini">Status</span>
+                        <select id="st_${t.id}"><option value="NORMAL">NORMAL</option><option value="WO">W.O.</option><option value="DQ">DQ</option></select></div>
+                        <div><span class="label-mini">Punição</span><input type="number" id="pun_${t.id}" placeholder="0"></div>
+                        <div><span class="label-mini">Posição</span><input type="number" id="pos_${t.id}" placeholder="1-12"></div>
+                        <div><span class="label-mini">Kills</span><input type="number" id="kil_${t.id}" placeholder="0"></div>
                     </div>
                 </div>
             </div>
         `).join('');
     }
 
-    function togglePay(id) { times[id].pago = !times[id].pago; renderSlots(); }
+    function confirmarSalvar() {
+        if(confirm(`Deseja ENCERRAR a Queda ${rodada} e somar os pontos?\nEsta ação não pode ser desfeita.`)) {
+            processarQueda();
+        }
+    }
 
     function processarQueda() {
         times.forEach(t => {
@@ -198,6 +174,7 @@
         rodada++;
         renderSlots(); renderTable();
         window.scrollTo({top: 0, behavior: 'smooth'});
+        alert(`Queda ${rodada-1} processada com sucesso!`);
     }
 
     function renderTable() {
@@ -207,7 +184,7 @@
                 <td style="color:${i<3?'var(--gold)':'#64748b'}">${i+1}º</td>
                 <td style="text-align:left">
                     <div style="color:#fff">${t.nome} ${'🏆'.repeat(t.booyahs)}</div>
-                    <div style="font-size:0.55rem; color:#64748b;">${t.jogadores}</div>
+                    <div style="font-size:0.5rem; color:#64748b;">${t.jogadores}</div>
                 </td>
                 <td>${t.kills}</td>
                 <td style="color:var(--accent)">${t.pts}</td>
@@ -215,21 +192,18 @@
         `).join('');
     }
 
+    function togglePay(id) { times[id].pago = !times[id].pago; renderSlots(); }
     function shareZap() {
         let txt = `🏆 *ASTRA FF* 🏆\n\n`;
-        [...times].sort((a,b) => b.pts - a.pts).forEach((t, i) => {
-            txt += `${i+1}º *${t.nome}* | ${t.pts} pts\n`;
-        });
+        [...times].sort((a,b) => b.pts - a.pts).forEach((t, i) => txt += `${i+1}º *${t.nome}* | ${t.pts} pts\n`);
         navigator.clipboard.writeText(txt); alert("Copiado!");
     }
-
     function shareImg() {
         html2canvas(document.getElementById('print-area'), {backgroundColor:'#020617'}).then(c => {
             const l = document.createElement('a'); l.download = 'tabela.png'; l.href = c.toDataURL(); l.click();
         });
     }
-
-    function finalizarTudo() { if(confirm("Zerar?")) location.reload(); }
+    function finalizarTudo() { if(confirm("Deseja apagar tudo e voltar ao início?")) location.reload(); }
 </script>
 </body>
 </html>
