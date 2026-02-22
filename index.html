@@ -3,91 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA - ELITE HUB</title>
+    <title>ASTRA ELITE | PLATAFORMA DE GESTÃO</title>
+    
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
-<body>
-    <div class="overlay-bg" id="overlay" onclick="toggleMenu()"></div>
+<body class="system-boot">
+
+    <div class="neon-grid"></div>
+    <div class="scanline"></div>
+    <div class="vignette"></div>
+
+    <div id="toast-container" class="toast-area"></div>
 
     <div id="welcome-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="neon-text">SISTEMA ATIVADO</h2>
-            <p>Selecione o modo de jogo e importe sua lista para iniciar a gestão da sala.</p>
-            <div class="mode-selector">
-                <button class="mode-btn active" onclick="setMode('SOLO', this)">SOLO</button>
-                <button class="mode-btn" onclick="setMode('DUO', this)">DUO</button>
-                <button class="mode-btn" onclick="setMode('SQUAD', this)">SQUAD</button>
+        <div class="modal-frame">
+            <div class="modal-header">
+                <h1 class="glitch-text" data-text="ASTRA_ELITE">ASTRA_ELITE</h1>
+                <p class="terminal-loader">Aguardando parâmetros do sistema...</p>
             </div>
-            <button class="glow-button" onclick="closeWelcome()">ACESSAR PAINEL</button>
+            
+            <div class="modal-body">
+                <div class="config-section">
+                    <label class="label-tech">SELECIONE O PROTOCOLO DE JOGO</label>
+                    <div class="mode-selector-grid">
+                        <div class="mode-card active" onclick="selectProtocol('SOLO', this)">
+                            <i class="ph-bold ph-user"></i>
+                            <span>SOLO</span>
+                        </div>
+                        <div class="mode-card" onclick="selectProtocol('DUO', this)">
+                            <i class="ph-bold ph-users"></i>
+                            <span>DUO</span>
+                        </div>
+                        <div class="mode-card" onclick="selectProtocol('SQUAD', this)">
+                            <i class="ph-bold ph-users-four"></i>
+                            <span>SQUAD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <label class="label-tech">ENTRADA DE DADOS (LISTA MASTER)</label>
+                    <textarea id="master-input" placeholder="Arraste a lista ou cole aqui...&#10;Ex: 01- TIME ASTRA"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="btn-initialize" class="btn-primary-glow" onclick="bootSystem()">
+                    <span class="btn-text">INICIALIZAR INTERFACE</span>
+                    <i class="ph-bold ph-rocket-launch"></i>
+                </button>
+            </div>
         </div>
     </div>
 
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-sidebar">ASTRA<span>.</span></div>
-            <div class="current-mode" id="display-modo">MODO: SOLO</div>
-        </div>
+    <div id="app-interface" class="interface-wrapper hidden">
         
-        <div class="sidebar-nav">
-            <div class="sidebar-item active" onclick="showView('setup')">⚙️ Configuração</div>
-            <div class="sidebar-item" onclick="showView('pix')">💰 Gestão de Slots</div>
-            <div class="sidebar-item" onclick="showView('queda')">🎮 Painel de Quedas</div>
-            <div class="sidebar-item" onclick="showView('busca')">🔍 Buscar Jogador</div>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="info-badge">v3.0 ELITE</div>
-            <button class="reset-btn" onclick="location.reload()">⚠️ RESETAR DIÁRIA</button>
-        </div>
-    </nav>
-
-    <header class="header">
-        <div class="menu-btn" onclick="toggleMenu()">☰</div>
-        <div class="header-center">
-            <span class="room-status">SALA: <span id="num-queda">01</span></span>
-        </div>
-        <div class="status-light"></div>
-    </header>
-
-    <main class="container">
-        
-        <section id="view-setup" class="view active">
-            <div class="glass-card">
-                <h3>CONFIGURAR LISTA MASTER</h3>
-                <p class="subtitle">Cole a lista de times/jogadores abaixo:</p>
-                <textarea id="input-lista" placeholder="01- NOME DO TIME&#10;02- NOME DO TIME..."></textarea>
-                <button onclick="processarLista()" class="glow-button">GERAR DIÁRIA</button>
+        <header class="main-hud">
+            <div class="hud-left">
+                <div class="system-logo">ASTRA<span>HUB</span></div>
             </div>
-        </section>
-
-        <section id="view-pix" class="view">
-            <div class="view-header">
-                <h3>PAGAMENTOS E NICKS</h3>
-            </div>
-            <div id="pix-list">
+            <div class="hud-center">
+                <div class="indicator">
+                    <span class="ind-label">MODO</span>
+                    <span id="hud-mode" class="ind-value">SOLO</span>
                 </div>
-        </section>
-
-        <section id="view-queda" class="view">
-            <div class="view-header">
-                <h3>LANÇAMENTO DE PONTOS</h3>
-            </div>
-            <div id="motor-queda">
+                <div class="indicator">
+                    <span class="ind-label">SALA</span>
+                    <span id="hud-round" class="ind-value">01</span>
                 </div>
-            <div id="tabela-resultado">
-                </div>
-        </section>
-
-        <section id="view-busca" class="view">
-            <div class="glass-card">
-                <h3>BUSCA NO TERMINAL</h3>
-                <input type="text" id="searchBar" placeholder="Digite time ou nick..." onkeyup="buscar()">
-                <div id="search-results"></div>
             </div>
-        </section>
+            <div class="hud-right">
+                <div class="clock" id="digital-clock">00:00:00</div>
+                <button class="btn-icon" onclick="toggleSettings()"><i class="ph-bold ph-gear"></i></button>
+            </div>
+        </header>
 
-    </main>
+        <div class="main-layout">
+            
+            <section class="operations-panel">
+                
+                <div class="filter-bar">
+                    <div class="search-input-wrapper">
+                        <i class="ph-bold ph-magnifying-glass"></i>
+                        <input type="text" id="global-search" placeholder="Filtrar por nick ou slot..." onkeyup="filterSlots()">
+                    </div>
+                    <div class="quick-stats">
+                        <span class="stat-pill">PAGOS: <b id="stat-paid">0</b></span>
+                        <span class="stat-pill">RESTANTE: <b id="stat-pending">0</b></span>
+                    </div>
+                </div>
+
+                <div id="slots-grid" class="slots-display-area">
+                    </div>
+
+                <div class="command-center">
+                    <button class="btn-action success" onclick="confirmRound()">
+                        <i class="ph-bold ph-check-circle"></i>
+                        <span>ENCERRAR QUEDA ATUAL</span>
+                    </button>
+                    <button class="btn-action warning" onclick="generateReport()">
+                        <i class="ph-bold ph-file-arrow-down"></i>
+                        <span>GERAR RELATÓRIO PARCIAL</span>
+                    </button>
+                </div>
+            </section>
+
+            <aside class="ranking-sidebar">
+                <div class="sidebar-header">
+                    <h3><i class="ph-bold ph-trophy"></i> LEADERBOARD</h3>
+                </div>
+                <div id="ranking-container" class="ranking-content">
+                    </div>
+                <div class="sidebar-footer">
+                    <button class="btn-copy-whatsapp" onclick="copyRanking()">
+                        <i class="ph-bold ph-whatsapp-logo"></i>
+                        COPIAR PARA WHATSAPP
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer class="footer-bar">
+        <div class="diag-item">SYSTEM_STATUS: <span class="text-success">OPTIMIZED</span></div>
+        <div class="diag-item">LATENCY: <span id="ping">12ms</span></div>
+        <div class="diag-item">ASTRA_ENGINE_V3.0</div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
