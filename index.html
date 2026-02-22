@@ -3,72 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA - ELITE ADMIN</title>
+    <title>ASTRA - ELITE HUB</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="neon-blob"></div>
-    <div class="neon-blob secondary"></div>
+    <div class="overlay-bg" id="overlay" onclick="toggleMenu()"></div>
 
     <div id="welcome-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="neon-text">BEM-VINDO, COMANDANTE</h2>
-            <p>O sistema Astra está online. Configure sua diária, gerencie slots e lance pontos com precisão cirúrgica.</p>
-            <div class="step-guide">
-                <span>1. Cole a Lista</span> ➜ <span>2. Valide PIX</span> ➜ <span>3. Lance a Queda</span>
+            <h2 class="neon-text">SISTEMA ATIVADO</h2>
+            <p>Selecione o modo de jogo e importe sua lista para iniciar a gestão da sala.</p>
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="setMode('SOLO', this)">SOLO</button>
+                <button class="mode-btn" onclick="setMode('DUO', this)">DUO</button>
+                <button class="mode-btn" onclick="setMode('SQUAD', this)">SQUAD</button>
             </div>
-            <button class="glow-button" onclick="closeWelcome()">INICIAR PROTOCOLO</button>
+            <button class="glow-button" onclick="closeWelcome()">ACESSAR PAINEL</button>
         </div>
     </div>
 
-    <div class="overlay-bg" id="overlay" onclick="toggleMenu()"></div>
-
     <nav class="sidebar" id="sidebar">
-        <div class="logo-sidebar">ASTRA<span>.</span></div>
-        <div class="sidebar-item" onclick="showView('setup')">⚙️ Configuração</div>
-        <div class="sidebar-item" onclick="showView('pix')">💰 Gestão de Slots</div>
-        <div class="sidebar-item" onclick="showView('queda')">🎮 Painel de Quedas</div>
-        <div class="sidebar-item" onclick="showView('busca')">🔍 Buscar Jogador</div>
+        <div class="sidebar-header">
+            <div class="logo-sidebar">ASTRA<span>.</span></div>
+            <div class="current-mode" id="display-modo">MODO: SOLO</div>
+        </div>
         
-        <div class="sidebar-info">
-            <div class="info-badge">v2.0 STABLE</div>
-            <p>Precisa de ajuda? Clique no ícone flutuante de suporte.</p>
+        <div class="sidebar-nav">
+            <div class="sidebar-item active" onclick="showView('setup')">⚙️ Configuração</div>
+            <div class="sidebar-item" onclick="showView('pix')">💰 Gestão de Slots</div>
+            <div class="sidebar-item" onclick="showView('queda')">🎮 Painel de Quedas</div>
+            <div class="sidebar-item" onclick="showView('busca')">🔍 Buscar Jogador</div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="info-badge">v3.0 ELITE</div>
+            <button class="reset-btn" onclick="location.reload()">⚠️ RESETAR DIÁRIA</button>
         </div>
     </nav>
 
     <header class="header">
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
-        <div class="logo">ASTRA <span>ADMIN</span></div>
-        <div class="status-indicator"></div>
+        <div class="header-center">
+            <span class="room-status">SALA: <span id="num-queda">01</span></span>
+        </div>
+        <div class="status-light"></div>
     </header>
 
-    <div class="container">
-        <div id="view-setup" class="view active">
+    <main class="container">
+        
+        <section id="view-setup" class="view active">
             <div class="glass-card">
-                <h3>IMPORTAR LISTA MASTER</h3>
-                <textarea id="input-lista" rows="8" placeholder="Ex:&#10;01- TIME LOUD&#10;02- TIME FLUXO..."></textarea>
+                <h3>CONFIGURAR LISTA MASTER</h3>
+                <p class="subtitle">Cole a lista de times/jogadores abaixo:</p>
+                <textarea id="input-lista" placeholder="01- NOME DO TIME&#10;02- NOME DO TIME..."></textarea>
                 <button onclick="processarLista()" class="glow-button">GERAR DIÁRIA</button>
             </div>
-        </div>
+        </section>
 
-        <div id="view-pix" class="view">
-            <h3 class="section-title">VALIDAR PAGAMENTOS</h3>
-            <div id="pix-list"></div>
-        </div>
+        <section id="view-pix" class="view">
+            <div class="view-header">
+                <h3>PAGAMENTOS E NICKS</h3>
+            </div>
+            <div id="pix-list">
+                </div>
+        </section>
 
-        <div id="view-queda" class="view">
-            <div id="motor-queda"></div>
-            <div id="tabela-resultado"></div>
-        </div>
+        <section id="view-queda" class="view">
+            <div class="view-header">
+                <h3>LANÇAMENTO DE PONTOS</h3>
+            </div>
+            <div id="motor-queda">
+                </div>
+            <div id="tabela-resultado">
+                </div>
+        </section>
 
-        <div id="view-busca" class="view">
+        <section id="view-busca" class="view">
             <div class="glass-card">
-                <input type="text" id="searchBar" placeholder="Pesquisar nick ou time..." onkeyup="buscar()">
+                <h3>BUSCA NO TERMINAL</h3>
+                <input type="text" id="searchBar" placeholder="Digite time ou nick..." onkeyup="buscar()">
                 <div id="search-results"></div>
             </div>
-        </div>
-    </div>
+        </section>
+
+    </main>
 
     <script src="script.js"></script>
 </body>
