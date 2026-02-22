@@ -169,22 +169,69 @@ function finalizarQueda() {
     alert("Queda encerrada!");
 }
 
-// --- RANKING & TOOLS ---
+// --- RANKING COM TROFÉU DINÂMICO ---
 function renderRanking() {
     document.getElementById('ranking-area').classList.remove('hidden');
     const table = document.getElementById('tabela-ranking');
+    
+    // Ordenação LBFF: Pontos > Booyahs > Kills
     const sorted = [...db.times].sort((a,b) => b.pts - a.pts || b.booyahs - a.booyahs || b.kills - a.kills);
 
     table.innerHTML = `<tr><th>#</th><th>TIME</th><th style="text-align:center">K</th><th style="text-align:center">PTS</th></tr>` + 
-    sorted.map((t, i) => `
+    sorted.map((t, i) => {
+        // Gera os troféus baseado na quantidade de vitórias
+        const trofeus = t.booyahs > 0 ? `<span style="color:var(--accent); margin-left:5px;">${'🏆'.repeat(t.booyahs)}</span>` : '';
+        const medalha = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}º`;
+        
+        return `
         <tr>
-            <td style="font-weight:900; color:${i<3?'var(--accent)':'white'}">${i+1}º</td>
-            <td><b>${t.nome}</b> ${t.streak >= 2 ? '🔥' : ''}<br><small>${t.nicks || '---'}</small></td>
+            <td style="font-weight:900; color:${i<3?'var(--accent)':'white'}">${medalha}</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:5px">
+                    <b style="font-size:0.85rem">${t.nome}</b> 
+                    ${t.streak >= 2 ? '<span class="win-streak">🔥</span>' : ''}
+                    ${trofeus}
+                </div>
+                <small style="color:var(--text-dim); font-size:0.65rem">${t.nicks || '---'}</small>
+            </td>
             <td style="text-align:center">${t.kills}</td>
             <td style="text-align:center; font-weight:900; color:var(--accent)">${t.pts}</td>
-        </tr>
+        </tr>`;
+    }).join('');
+}
+
+// --- AJUSTE NO MOTOR (PARA EXIBIR VITÓRIAS ACUMULADAS) ---
+function renderMotor() {
+    const container = document.getElementById('motor-container');
+    document.getElementById('round-label').innerText = `QUEDA #${db.rodadaAtual}`;
+    document.getElementById('round-hud').innerText = `Q${db.rodadaAtual}`;
+
+    container.innerHTML = db.times.map(t => `
+        <div class="slot-queda">
+            <div class="slot-head" onclick="toggleSlot(this)">
+                <div style="display:flex; align-items:center; gap:8px">
+                    <span>#${t.id+1} ${t.nome}</span>
+                    ${t.booyahs > 0 ? `<span style="font-size:0.7rem">🏆${t.booyahs}</span>` : ''}
+                    ${t.streak >= 2 ? '<span class="win-streak">🔥</span>' : ''}
+                </div>
+                <span style="color:var(--accent)">${t.pts} PTS</span>
+            </div>
+            <div class="slot-content">
+                <div><label>STATUS</label>
+                    <select id="st_${t.id}">
+                        <option value="N">NORMAL</option>
+                        <option value="DQ">DQ</option>
+                        <option value="WO">W.O</option>
+                    </select>
+                </div>
+                <div><label>PUNIÇÃO</label><input type="number" id="pun_${t.id}" value="0"></div>
+                <div><label>POSIÇÃO</label><input type="number" id="pos_${t.id}" placeholder="1-12"></div>
+                <div><label>KILLS</label><input type="number" id="kil_${t.id}" placeholder="0"></div>
+            </div>
+        </div>
     `).join('');
 }
+
 
 function copiarTexto() {
     let txt = `🏆 *ASTRA FF - ${db.modo}* 🏆\n📊 *RANKING APÓS Q${db.rodadaAtual-1}*\n\n`;
