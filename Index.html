@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astra FF - Painel de Diárias</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #0f172a; color: #f8fafc; padding-bottom: 50px; }
+        
+        .navbar { background-color: #1e293b; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; }
+        .navbar h1 { color: #fbbf24; font-size: 1.5rem; }
+        .btn-sair { background-color: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        .container { padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; }
+        
+        .card { background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .card h3 { color: #fbbf24; margin-bottom: 10px; font-size: 1.2rem; }
+        .card p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px; }
+        
+        textarea { width: 100%; background-color: #334155; color: white; border: 1px solid #475569; padding: 12px; border-radius: 5px; margin-bottom: 15px; font-size: 1rem; }
+        textarea:focus { outline: none; border-color: #fbbf24; }
+        
+        .btn-verde { background-color: #22c55e; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; }
+        .btn-azul { background-color: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
+        .btn-vermelho { background-color: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9rem; margin-left: 10px;}
+        
+        /* Botão Exportação WhatsApp */
+        .area-exportacao { display: flex; gap: 10px; margin-top: 15px; display: none; }
+        .btn-wpp { background-color: #25D366; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem;}
+
+        .grid-slots { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .slot-item { background-color: #334155; padding: 12px; border-radius: 5px; border-left: 5px solid #fbbf24; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .slot-nome { color: white; font-weight: bold; font-size: 1.1rem; }
+        
+        .slot-controles { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;}
+        .input-pequeno { width: 60px; background-color: #0f172a; color: white; border: 1px solid #475569; padding: 8px; border-radius: 4px; text-align: center; font-weight: bold; }
+        .input-punicao { width: 70px; background-color: #450a0a; color: #fca5a5; border: 1px solid #ef4444; padding: 8px; border-radius: 4px; text-align: center; font-weight: bold; }
+        
+        /* Controle Financeiro */
+        .btn-financeiro { padding: 8px; border-radius: 4px; border: none; font-weight: bold; cursor: pointer; width: 85px; font-size: 0.8rem; transition: 0.3s; }
+        .pago { background-color: #064e3b; color: #34d399; border: 1px solid #059669; }
+        .pendente { background-color: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #1e293b; border-radius: 5px; overflow: hidden; }
+        th { background-color: #334155; padding: 12px; text-align: center; color: #cbd5e1; font-size: 0.8rem; text-transform: uppercase; }
+        th:nth-child(2) { text-align: left; } 
+        td { padding: 12px; border-bottom: 1px solid #334155; text-align: center; }
+        td:nth-child(2) { text-align: left; font-weight: bold; } 
+        .posicao { color: #fbbf24; font-weight: bold; font-size: 1.1rem; }
+        .pontos-total { color: #4ade80; font-weight: bold; font-size: 1.2rem; }
+        .booyah-text { color: #fbbf24; font-size: 0.8rem; margin-left: 5px;}
+
+        .info-queda { background-color: #1e293b; border: 1px solid #fbbf24; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; color: #fbbf24; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1>🏆 Astra FF Admin</h1>
+        <button class="btn-sair">Sair</button>
+    </nav>
+
+    <div class="container">
+        <div class="card" id="sessaoCadastro">
+            <h3>📝 Cadastrar Times</h3>
+            <textarea id="listaTimes" rows="5" placeholder="1 - LOUD&#10;2 - FLUXO"></textarea>
+            <button class="btn-verde" onclick="iniciarCampeonato()">Iniciar Campeonato</button>
+        </div>
+
+        <div class="card" id="sessaoResultados" style="display: none;">
+            <div class="info-queda" id="textoQuedaAtual">Lançando resultados da: QUEDA 1</div>
+            <div id="areaSlots"></div>
+            <button class="btn-azul" onclick="salvarQueda()">Salvar Queda e Atualizar Tabela</button>
+        </div>
+
+        <div class="card" id="cartaoTabelaFinal">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>📊 Tabela Geral Acumulada</h3>
+                <button class="btn-vermelho" onclick="resetarTudo()" id="btnReset" style="display: none;">Resetar Tudo</button>
+            </div>
+            
+            <div id="areaTabela" style="overflow-x: auto; padding-bottom: 10px;">
+                <p style="color: #64748b; font-style: italic; margin-top: 15px;">A tabela aparecerá aqui...</p>
+            </div>
+        </div>
+
+        <div class="area-exportacao" id="areaExportacao">
+            <button class="btn-wpp" onclick="copiarWhatsApp()">🟢 Copiar Tabela para WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        let times = []; 
+        let quedaAtual = 1;
+        let timesOrdenadosGlobais = []; 
+        const pontosLBFF = { 1: 12, 2: 9, 3: 8, 4: 7, 5: 6, 6: 5, 7: 4, 8: 3, 9: 2, 10: 1, 11: 0, 12: 0 };
+
+        function iniciarCampeonato() {
+            const texto = document.getElementById('listaTimes').value;
+            if(texto.trim() === "") { alert("Astra: Cole a lista de times!"); return; }
+
+            const linhas = texto.split('\n');
+            times = []; 
+            quedaAtual = 1;
+            let idContador = 1;
+
+            linhas.forEach(linha => {
+                if(linha.trim() !== "") {
+                    let nomeTime = linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim();
+                    // Adicionei a variável "pago" começando como falsa (Pendente)
+                    times.push({ id: idContador, nome: nomeTime, totalPts: 0, totalKills: 0, booyahs: 0, penalidade: 0, pago: false });
+                    idContador++;
+                }
+            });
+
+            document.getElementById('sessaoCadastro').style.display = 'none';
+            document.getElementById('sessaoResultados').style.display = 'block';
+            document.getElementById('btnReset').style.display = 'block';
+            atualizarTelaDeSlots();
+            renderizarTabela();
+        }
+
+        function atualizarTelaDeSlots() {
+            document.getElementById('textoQuedaAtual').innerText = `Lançando resultados da: QUEDA ${quedaAtual}`;
+            const areaSlots = document.getElementById('areaSlots');
+            let htmlSlots = '<div class="grid-slots">';
+
+            times.forEach(time => {
+                // Desenha o botão de pagamento com a cor certa
+                let classePagamento = time.pago ? 'pago' : 'pendente';
+                let textoPagamento = time.pago ? '✅ PAGO' : '❌ DEVE';
+
+                htmlSlots += `
+                    <div class="slot-item">
+                        <span class="slot-nome">${time.nome}</span>
+                        <div class="slot-controles">
+                            <button id="btn_pag_${time.id}" class="btn-financeiro ${classePagamento}" onclick="alternarPagamento(${time.id})">${textoPagamento}</button>
+                            <input type="number" id="pos_${time.id}" class="input-pequeno" placeholder="Pos" min="1" max="12">
+                            <input type="number" id="kills_${time.id}" class="input-pequeno" placeholder="Kills" min="0">
+                            <input type="number" id="punicao_${time.id}" class="input-punicao" placeholder="- Pts" min="0">
+                        </div>
+                    </div>
+                `;
+            });
+            areaSlots.innerHTML = htmlSlots + '</div>';
+        }
+
+        // Função de controle financeiro (Muda a cor do botão na hora sem apagar o que vc já digitou)
+        function alternarPagamento(id) {
+            let time = times.find(t => t.id === id);
+            if(time) {
+                time.pago = !time.pago; // Inverte o status
+                let btn = document.getElementById(`btn_pag_${id}`);
+                if(time.pago) {
+                    btn.className = 'btn-financeiro pago';
+                    btn.innerHTML = '✅ PAGO';
+                } else {
+                    btn.className = 'btn-financeiro pendente';
+                    btn.innerHTML = '❌ DEVE';
+                }
+            }
+        }
+
+        function salvarQueda() {
+            times.forEach(time => {
+                let pos = parseInt(document.getElementById(`pos_${time.id}`).value) || 12; 
+                let kills = parseInt(document.getElementById(`kills_${time.id}`).value) || 0;
+                let punicao = parseInt(document.getElementById(`punicao_${time.id}`).value) || 0;
+
+                let ptsPos = pontosLBFF[pos] || 0;
+                time.totalPts += (ptsPos + kills) - punicao;
+                time.totalKills += kills;
+                time.penalidade += punicao;
+                
+                if(pos === 1) { time.booyahs += 1; }
+            });
+
+            quedaAtual++;
+            atualizarTelaDeSlots();
+            renderizarTabela();
+            document.getElementById('areaExportacao').style.display = 'flex';
+        }
+
+        function renderizarTabela() {
+            timesOrdenadosGlobais = [...times].sort((a, b) => {
+                if (b.totalPts !== a.totalPts) return b.totalPts - a.totalPts;
+                if (b.booyahs !== a.booyahs) return b.booyahs - a.booyahs;
+                return b.totalKills - a.totalKills;
+            });
+
+            const areaTabela = document.getElementById('areaTabela');
+            let htmlTabela = `
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>Time</th><th>Kills</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            let ranking = 1;
+            timesOrdenadosGlobais.forEach(time => {
+                let iconeBooyah = time.booyahs > 0 ? `<span class="booyah-text">(${time.booyahs}x 🏆)</span>` : "";
+                
+                htmlTabela += `
+                    <tr>
+                        <td class="posicao">${ranking}º</td>
+                        <td>${time.nome} ${iconeBooyah}</td>
+                        <td>${time.totalKills}</td>
+                        <td class="pontos-total">${time.totalPts}</td>
+                    </tr>
+                `;
+                ranking++;
+            });
+
+            areaTabela.innerHTML = htmlTabela + `</tbody></table>`;
+        }
+
+        function copiarWhatsApp() {
+            let textoWpp = `🏆 *CLASSIFICAÇÃO FINAL DA DIÁRIA* 🏆\n\n`;
+            
+            let ranking = 1;
+            timesOrdenadosGlobais.forEach(time => {
+                let medalha = ranking === 1 ? '🥇' : ranking === 2 ? '🥈' : ranking === 3 ? '🥉' : '▪️';
+                let txtBooyah = time.booyahs > 0 ? ` (${time.booyahs}x BOOYAH!)` : '';
+                
+                textoWpp += `${medalha} *${ranking}º ${time.nome}* | Pts: *${time.totalPts}* | Kills: ${time.totalKills}${txtBooyah}\n`;
+                ranking++;
+            });
+
+            textoWpp += `\n🤖 _Gerado via Astra FF Admin_`;
+
+            navigator.clipboard.writeText(textoWpp).then(() => {
+                alert("✅ Tabela copiada! Agora é só colar no grupo do WhatsApp.");
+            }).catch(err => {
+                alert("Erro ao copiar. Seu navegador bloqueou a ação.");
+            });
+        }
+
+        function resetarTudo() {
+            if(confirm("Certeza que deseja zerar a diária?")) {
+                document.getElementById('sessaoCadastro').style.display = 'block';
+                document.getElementById('sessaoResultados').style.display = 'none';
+                document.getElementById('areaExportacao').style.display = 'none';
+                document.getElementById('btnReset').style.display = 'none';
+                document.getElementById('listaTimes').value = "";
+                document.getElementById('areaTabela').innerHTML = "<p style='color: #64748b; margin-top: 15px;'>Tabela resetada.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
