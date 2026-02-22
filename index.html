@@ -3,209 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA FF - ELITE MANAGER</title>
+    <title>ASTRA FF - ELITE MANAGER PRO</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { 
             --bg: #020617; --card: #1e293b; --accent: #fbbf24; 
-            --gold: #f59e0b; --silver: #94a3b8; --bronze: #78350f;
-            --neon: 0 0 10px rgba(251, 191, 36, 0.4);
+            --gold: #f59e0b; --danger: #ef4444; --success: #22c55e;
+            --neon: 0 0 15px rgba(251, 191, 36, 0.3);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: #f8fafc; padding-bottom: 50px; }
+        body { background-color: var(--bg); color: #f8fafc; padding-bottom: 60px; }
         
-        /* Header Estilo Garena */
         .header { 
-            background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            padding: 25px; text-align: center; border-bottom: 3px solid var(--accent);
-            box-shadow: var(--neon);
+            background: linear-gradient(180deg, #1e293b 0%, #020617 100%);
+            padding: 30px 15px; text-align: center; border-bottom: 3px solid var(--accent);
+            box-shadow: var(--neon); margin-bottom: 20px;
         }
-        .header h1 { font-family: 'Orbitron', sans-serif; font-weight: 900; letter-spacing: 4px; color: var(--accent); text-shadow: 2px 2px #000; font-size: 1.6rem; }
-        .header p { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; margin-top: 5px; }
+        .header h1 { font-family: 'Orbitron', sans-serif; letter-spacing: 5px; color: var(--accent); font-size: 1.8rem; }
 
-        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
+        .container { padding: 10px; max-width: 600px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h3 { font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 20px; font-size: 0.8rem; text-transform: uppercase; border-left: 4px solid var(--accent); padding-left: 10px; }
+
+        textarea { width: 100%; background: #0f172a; color: #fff; border: 1px solid #475569; padding: 15px; border-radius: 10px; font-size: 1rem; margin-bottom: 15px; }
+        select, .input-ff { background: #1e293b; border: 1px solid #475569; color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; width: 100%; }
         
-        .card { 
-            background: var(--card); border-radius: 15px; padding: 20px; margin-bottom: 20px;
-            border: 1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        }
-        h3 { font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 15px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
-
-        textarea { 
-            width: 100%; background: #0f172a; color: #fff; border: 2px solid #334155; 
-            padding: 15px; border-radius: 10px; font-size: 1rem; margin-bottom: 15px; transition: 0.3s;
-        }
-        textarea:focus { border-color: var(--accent); outline: none; box-shadow: var(--neon); }
-
-        .btn { 
-            width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 900; 
-            text-transform: uppercase; cursor: pointer; transition: 0.3s; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
-        }
-        .btn-main { background: var(--accent); color: #000; box-shadow: 0 4px 0 #b45309; }
-        .btn-main:active { transform: translateY(4px); box-shadow: none; }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.2s; }
+        .btn-main { background: var(--accent); color: #000; margin-bottom: 10px; box-shadow: 0 4px 0 #b45309; }
         
-        .slot-item { background: #0f172a; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #334155; }
-        .slot-name { font-weight: 900; color: #cbd5e1; margin-bottom: 10px; display: block; font-size: 0.9rem; }
-        .inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .input-ff { background: #1e293b; border: 1px solid #475569; color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; }
+        /* Grid Formato */
+        .formato-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .formato-opt { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 0.7rem; font-weight: bold; color: #64748b; }
+        .formato-opt.active { border-color: var(--accent); color: var(--accent); box-shadow: var(--neon); }
 
-        /* Tabela Profissional */
-        .table-container { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #0f172a; padding: 12px; color: #64748b; font-size: 0.7rem; text-transform: uppercase; }
-        td { padding: 14px; text-align: center; border-bottom: 1px solid #334155; font-weight: 700; }
+        .slot-item { background: #0f172a; padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #334155; }
+        .slot-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .slot-name { font-weight: 800; color: #fff; font-size: 1rem; }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .full-col { grid-column: span 2; }
+        .label-mini { font-size: 0.6rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block; margin-top: 5px; }
 
-        /* Medalhas Neon */
-        .rank-1 { color: var(--gold); text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); font-size: 1.2rem; }
-        .rank-2 { color: var(--silver); }
-        .rank-3 { color: var(--bronze); }
+        .table-res { width: 100%; border-collapse: collapse; margin-top: 10px; background: #0f172a; border-radius: 10px; overflow: hidden; }
+        .table-res th { padding: 12px; font-size: 0.65rem; color: #64748b; background: #1e293b; text-align: center; }
+        .table-res td { padding: 15px 10px; text-align: center; border-bottom: 1px solid #1e293b; font-weight: 700; font-size: 0.8rem; }
+        
+        .btn-pay { padding: 4px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; border: none; }
+        .pay-ok { background: var(--success); color: white; }
+        .pay-no { background: var(--danger); color: white; }
 
-        /* Histórico */
-        .history-item { 
-            background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 8px; 
-            font-size: 0.8rem; border-left: 3px solid var(--accent); display: flex; justify-content: space-between;
-        }
-
-        .export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .btn-zap { background: #22c55e; color: #fff; }
-        .btn-print { background: #8b5cf6; color: #fff; }
+        .history-item { display: flex; justify-content: space-between; font-size: 0.7rem; background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 5px; border-left: 3px solid var(--accent); }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>ASTRA FF</h1>
-    <p>Tournament Management System</p>
+    <h1>ASTRA FF PRO</h1>
+    <p style="color: #64748b; font-size: 0.6rem; letter-spacing: 2px;">MANAGER DE ELITE</p>
 </div>
 
 <div class="container">
-    <div class="card" id="view-setup">
-        <h3>📝 NOVA DIÁRIA</h3>
-        <textarea id="lista-input" rows="8" placeholder="1 - TIME A&#10;2 - TIME B..."></textarea>
-        <button class="btn btn-main" onclick="iniciarCamp()">GERAR COMPETIÇÃO</button>
+    <div class="card" id="step-1">
+        <h3>⚙️ CONFIGURAR DIÁRIA</h3>
         
-        <div id="historico-box" style="margin-top: 25px; display:none">
-            <h3 style="font-size: 0.7rem; color: #64748b;">🏆 ÚLTIMOS RESULTADOS</h3>
-            <div id="history-list"></div>
+        <span class="label-mini">FORMATO DO CAMPEONATO</span>
+        <div class="formato-grid">
+            <div class="formato-opt active" id="opt-SOLO" onclick="setFormato('SOLO')">SOLO</div>
+            <div class="formato-opt" id="opt-DUO" onclick="setFormato('DUO')">DUO</div>
+            <div class="formato-opt" id="opt-SQUAD" onclick="setFormato('SQUAD')">SQUAD</div>
+        </div>
+
+        <span class="label-mini">LISTA DE SLOTS (NUMERADA)</span>
+        <textarea id="input-lista" rows="8" placeholder="01 - TIME ALPHA&#10;02 - TIME BRAVO..."></textarea>
+        
+        <button class="btn btn-main" onclick="initApp()">GERAR CAMPEONATO</button>
+        
+        <div id="hist-area" style="display:none; margin-top: 20px;">
+            <h3 style="border:none; font-size: 0.7rem; color: #64748b;">🏆 ÚLTIMOS CAMPEÕES</h3>
+            <div id="hist-list"></div>
         </div>
     </div>
 
-    <div class="card" id="view-scores" style="display:none">
-        <h3 id="label-queda">LANÇANDO QUEDA 1</h3>
-        <div id="slots-area"></div>
-        <button class="btn btn-main" style="background:#3b82f6; box-shadow: 0 4px 0 #1d4ed8;" onclick="salvarQueda()">CONCLUIR QUEDA</button>
-        <button onclick="finalizarCamp()" style="background:none; border:none; color:#64748b; width:100%; margin-top:15px; font-size:0.7rem; cursor:pointer">FINALIZAR E ARQUIVAR CAMPEONATO</button>
+    <div class="card" id="step-2" style="display:none">
+        <h3 id="titulo-queda">LANÇAMENTO: QUEDA 1</h3>
+        <div id="slots-container"></div>
+        <button class="btn btn-main" style="background:#3b82f6; box-shadow: 0 4px 0 #1d4ed8;" onclick="processarQueda()">SALVAR RESULTADOS</button>
+        <button onclick="finalizarTudo()" style="color:var(--danger); background:none; border:none; width:100%; margin-top:20px; cursor:pointer; font-size:0.6rem; font-weight:bold; text-decoration: underline;">ENCERRAR E ARQUIVAR TUDO</button>
     </div>
 
-    <div class="card" id="view-table" style="display:none">
-        <h3>📊 CLASSIFICAÇÃO ATUAL</h3>
-        <div class="table-container" id="capture-area">
-            <table>
-                <thead><tr><th>#</th><th>TIME</th><th>KILLS</th><th>TOTAL</th></tr></thead>
-                <tbody id="table-body"></tbody>
+    <div class="card" id="step-3" style="display:none">
+        <h3>📊 CLASSIFICAÇÃO GERAL</h3>
+        <div id="print-area" style="background:#020617; padding:10px; border-radius:12px;">
+            <div style="text-align:center; margin-bottom:10px;"><small id="display-formato" style="color:var(--accent); font-weight:bold; font-size:0.6rem;"></small></div>
+            <table class="table-res">
+                <thead><tr><th>#</th><th style="text-align:left">TIME / JOGADORES</th><th>K</th><th>PTS</th></tr></thead>
+                <tbody id="corpo-tabela"></tbody>
             </table>
         </div>
-        <div class="export-grid">
-            <button class="btn btn-zap" onclick="exportZap()">WHATSAPP</button>
-            <button class="btn btn-print" onclick="exportImg()">INSTAGRAM</button>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:15px;">
+            <button class="btn btn-main" style="background:#22c55e; box-shadow:0 4px 0 #15803d; font-size:0.7rem" onclick="shareZap()">WHATSAPP</button>
+            <button class="btn btn-main" style="background:#8b5cf6; box-shadow:0 4px 0 #6d28d9; font-size:0.7rem" onclick="shareImg()">GERAR PRINT</button>
         </div>
     </div>
 </div>
 
 <script>
-    let times = []; let queda = 1;
-    const pontos = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
+    let times = []; let rodada = 1; let formato = 'SOLO';
+    const ptsLBFF = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
 
-    // Carregar histórico ao iniciar
-    window.onload = () => { renderHistory(); };
+    window.onload = loadHist;
 
-    function iniciarCamp() {
-        const raw = document.getElementById('lista-input').value;
-        if(!raw.trim()) return;
-        times = raw.split('\n').filter(l => l.trim()).map((l, i) => ({
-            id: i, nome: l.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
-            kills: 0, pts: 0, booyahs: 0
+    function setFormato(f) {
+        formato = f;
+        document.querySelectorAll('.formato-opt').forEach(el => el.classList.remove('active'));
+        document.getElementById(`opt-${f}`).classList.add('active');
+    }
+
+    function initApp() {
+        const val = document.getElementById('input-lista').value;
+        if(!val.trim()) return;
+        times = val.split('\n').filter(l => l.trim()).map((l, i) => ({
+            id: i,
+            nome: l.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
+            jogadores: "", kills: 0, pts: 0, booyahs: 0, dq: false, pago: false, pix: ""
         }));
-        document.getElementById('view-setup').style.display = 'none';
-        document.getElementById('view-scores').style.display = 'block';
-        document.getElementById('view-table').style.display = 'block';
+        document.getElementById('display-formato').innerText = `MODALIDADE: ${formato}`;
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'block';
+        document.getElementById('step-3').style.display = 'block';
         renderSlots();
     }
 
     function renderSlots() {
-        document.getElementById('label-queda').innerText = `LANÇANDO QUEDA ${queda}`;
-        document.getElementById('slots-area').innerHTML = times.map(t => `
+        document.getElementById('titulo-queda').innerText = `LANÇAMENTO: QUEDA ${rodada}`;
+        document.getElementById('slots-container').innerHTML = times.map(t => `
             <div class="slot-item">
-                <span class="slot-name">${t.nome}</span>
-                <div class="inputs-row">
-                    <input type="number" id="p_${t.id}" class="input-ff" placeholder="POSIÇÃO">
-                    <input type="number" id="k_${t.id}" class="input-ff" placeholder="KILLS">
+                <div class="slot-header">
+                    <span class="slot-name">${t.nome}</span>
+                    <button class="btn-pay ${t.pago?'pay-ok':'pay-no'}" onclick="togglePay(${t.id})">${t.pago?'PAGO':'PENDENTE'}</button>
+                </div>
+                
+                <div class="grid-inputs">
+                    <div class="full-col">
+                        <span class="label-mini">JOGADORES (SEPARADOS POR VÍRGULA)</span>
+                        <input type="text" class="input-ff" placeholder="Nomes dos membros" value="${t.jogadores}" onchange="saveJogadores(${t.id}, this.value)">
+                    </div>
+                    <div class="full-col">
+                        <span class="label-mini">CHAVE PIX / OBS</span>
+                        <input type="text" class="input-ff" style="font-size:0.7rem" placeholder="Chave para premiação" value="${t.pix}" onchange="savePix(${t.id}, this.value)">
+                    </div>
+                    <div>
+                        <span class="label-mini">STATUS</span>
+                        <select id="st_${t.id}" class="input-ff">
+                            <option value="NORMAL">NORMAL</option>
+                            <option value="WO">W.O.</option>
+                            <option value="DQ">DQ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="label-mini">PUNIÇÃO (-PTS)</span>
+                        <input type="number" id="pun_${t.id}" class="input-ff" style="color:var(--danger)">
+                    </div>
+                    <div>
+                        <span class="label-mini">POSIÇÃO FINAL</span>
+                        <input type="number" id="pos_${t.id}" class="input-ff" placeholder="1 a 12">
+                    </div>
+                    <div>
+                        <span class="label-mini">ELIMINAÇÕES (KILLS)</span>
+                        <input type="number" id="kil_${t.id}" class="input-ff">
+                    </div>
                 </div>
             </div>
         `).join('');
     }
 
-    function salvarQueda() {
+    function saveJogadores(id, v) { times[id].jogadores = v; }
+    function savePix(id, v) { times[id].pix = v; }
+    function togglePay(id) { times[id].pago = !times[id].pago; renderSlots(); }
+
+    function processarQueda() {
         times.forEach(t => {
-            const pos = parseInt(document.getElementById(`p_${t.id}`).value) || 12;
-            const kil = parseInt(document.getElementById(`k_${t.id}`).value) || 0;
-            t.pts += (pontos[pos] || 0) + kil;
-            t.kills += kil;
-            if(pos === 1) t.booyahs++;
+            const st = document.getElementById(`st_${t.id}`).value;
+            const pun = parseInt(document.getElementById(`pun_${t.id}`).value) || 0;
+            if(st === "NORMAL") {
+                const pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
+                const kil = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
+                t.pts += (ptsLBFF[pos] || 0) + kil - pun;
+                t.kills += kil;
+                if(pos === 1) t.booyahs++;
+            } else {
+                if(st === "DQ") t.dq = true;
+                t.pts -= pun;
+            }
         });
-        queda++;
+        rodada++;
         renderSlots(); renderTable();
         window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
     }
 
     function renderTable() {
-        const sorted = [...times].sort((a,b) => b.pts - a.pts || b.kills - a.kills);
-        document.getElementById('table-body').innerHTML = sorted.map((t, i) => `
-            <tr>
-                <td class="rank-${i+1}">${i+1}º</td>
-                <td style="text-align:left; font-size:0.8rem">${t.nome} ${'🏆'.repeat(t.booyahs)}</td>
+        const sorted = [...times].sort((a,b) => b.pts - a.pts || b.booyahs - a.booyahs || b.kills - a.kills);
+        document.getElementById('corpo-tabela').innerHTML = sorted.map((t, i) => `
+            <tr style="${t.dq?'opacity:0.4':''}">
+                <td style="color:var(${i<3?'--gold':'--silver'})">${i+1}º</td>
+                <td style="text-align:left">
+                    <div style="color:#fff">${t.nome} ${'🏆'.repeat(t.booyahs)}</div>
+                    <div style="font-size:0.6rem; color:#64748b; font-weight:normal">${t.jogadores}</div>
+                </td>
                 <td>${t.kills}</td>
                 <td style="color:var(--accent)">${t.pts}</td>
             </tr>
         `).join('');
     }
 
-    function exportZap() {
-        let txt = `🏆 *ASTRA FF - RESULTADOS* 🏆\n\n`;
+    function shareZap() {
+        let txt = `🏆 *ASTRA FF - ${formato}* 🏆\n\n`;
         [...times].sort((a,b) => b.pts - a.pts).forEach((t, i) => {
-            txt += `${i+1}º *${t.nome}* - ${t.pts} pts\n`;
+            txt += `${i+1}º *${t.nome}* | Pts: ${t.pts} ${t.dq?'(DQ)':''}\n`;
         });
         navigator.clipboard.writeText(txt); alert("Copiado!");
     }
 
-    function exportImg() {
-        html2canvas(document.getElementById('capture-area'), {backgroundColor:'#0f172a'}).then(canvas => {
-            const l = document.createElement('a'); l.download = 'tabela-astra.png';
-            l.href = canvas.toDataURL(); l.click();
+    function shareImg() {
+        html2canvas(document.getElementById('print-area'), {backgroundColor:'#020617'}).then(c => {
+            const l = document.createElement('a'); l.download = 'tabela-astra.png'; l.href = c.toDataURL(); l.click();
         });
     }
 
-    function finalizarCamp() {
-        if(!confirm("Deseja arquivar este campeonato?")) return;
-        const sorted = [...times].sort((a,b) => b.pts - a.pts);
-        const win = sorted[0];
-        const campData = { data: new Date().toLocaleDateString(), campeao: win.nome, pts: win.pts };
-        
-        let hist = JSON.parse(localStorage.getItem('astra_history') || '[]');
-        hist.unshift(campData);
-        localStorage.setItem('astra_history', JSON.stringify(hist.slice(0, 5)));
+    function finalizarTudo() {
+        if(!confirm("Finalizar diária?")) return;
+        const top = [...times].sort((a,b) => b.pts - a.pts)[0];
+        const hData = { date: new Date().toLocaleDateString(), info: `${formato} - ${top.nome}`, pts: top.pts };
+        let h = JSON.parse(localStorage.getItem('astra_master_h') || '[]');
+        h.unshift(hData);
+        localStorage.setItem('astra_master_h', JSON.stringify(h.slice(0,5)));
         location.reload();
     }
 
-    function renderHistory() {
-        const hist = JSON.parse(localStorage.getItem('astra_history') || '[]');
-        if(hist.length > 0) {
-            document.getElementById('historico-box').style.display = 'block';
-            document.getElementById('history-list').innerHTML = hist.map(h => `
+    function loadHist() {
+        const h = JSON.parse(localStorage.getItem('astra_master_h') || '[]');
+        if(h.length > 0) {
+            document.getElementById('hist-area').style.display = 'block';
+            document.getElementById('hist-list').innerHTML = h.map(x => `
                 <div class="history-item">
-                    <span>${h.data} - <strong>${h.campeao}</strong></span>
-                    <span style="color:var(--accent)">${h.pts} PTS</span>
+                    <span>${x.date} - <strong>${x.info}</strong></span>
+                    <span style="color:var(--accent)">${x.pts} PTS</span>
                 </div>
             `).join('');
         }
