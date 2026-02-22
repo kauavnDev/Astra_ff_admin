@@ -3,122 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA FF - ELITE HUB</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>ASTRA FF - CYBER PUNK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #020617; --card: #1e293b; --accent: #fbbf24; --danger: #ef4444; --success: #22c55e; --gold: #f59e0b; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: #f8fafc; overflow-x: hidden; }
+        :root { 
+            --bg: #05070a; --card: #0d1117; --accent: #00f2ff; 
+            --neon-pink: #ff00ea; --success: #39ff14; --danger: #ff3131;
+            --gold: #ffcc00; --glass: rgba(13, 17, 23, 0.8);
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rajdhani', sans-serif; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: #e2e8f0; 
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #101520 0%, #05070a 100%);
+        }
+
+        /* --- ANIMAÇÕES --- */
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* --- HEADER NEON --- */
         .header { 
-            background: #0f172a; padding: 15px; display: flex; 
+            background: var(--glass); padding: 15px; display: flex; 
             justify-content: space-between; align-items: center;
             border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
         }
-        .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--accent); }
-        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent); }
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent); text-shadow: 0 0 10px var(--accent); letter-spacing: 2px; }
 
+        /* --- SIDEBAR CYBER --- */
         .sidebar {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
-            background: #0f172a; transition: 0.3s; z-index: 200;
-            box-shadow: 10px 0 20px rgba(0,0,0,0.5); padding: 20px;
+            background: #0a0e14; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200;
+            border-right: 1px solid var(--accent); padding: 20px;
         }
         .sidebar.active { left: 0; }
         .sidebar-item { 
-            padding: 15px; border-bottom: 1px solid #1e293b; 
-            cursor: pointer; color: #94a3b8; transition: 0.2s;
+            padding: 15px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; color: #94a3b8; border: 1px solid transparent; transition: 0.3s;
         }
-        .sidebar-item:hover { color: var(--accent); background: #1e293b; }
-        .overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); display: none; z-index: 150; 
-        }
+        .sidebar-item:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--accent); color: var(--accent); transform: translateX(10px); }
 
+        /* --- TUTORIAL OVERLAY --- */
+        #tutorial-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 999; display: flex;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .step-box {
+            background: var(--card); border: 2px solid var(--neon-pink); padding: 25px;
+            border-radius: 15px; text-align: center; max-width: 400px;
+            box-shadow: 0 0 30px var(--neon-pink);
+        }
+        .arrow-next { color: var(--neon-pink); font-size: 2rem; margin-top: 15px; cursor: pointer; animation: pulse 1.5s infinite; }
+
+        /* --- CARDS & INPUTS --- */
         .container { padding: 15px; max-width: 550px; margin: 0 auto; }
-        .view { display: none; }
+        .view { display: none; animation: slideIn 0.4s ease-out; }
         .view.active { display: block; }
         
-        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #334155; }
-        h3 { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; }
-        
-        input, textarea, select { 
-            width: 100%; background: #0f172a; border: 1px solid #475569; color: #fff; 
-            padding: 10px; border-radius: 8px; margin-top: 5px; font-size: 0.85rem;
+        .card { 
+            background: var(--card); border-radius: 12px; padding: 15px; 
+            margin-bottom: 20px; border: 1px solid #1e293b;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-        
-        .btn-pay { padding: 5px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; border: none; cursor: pointer; }
-        .pay-ok { background: var(--success); color: white; }
-        .pay-no { background: var(--danger); color: white; }
+        .card:hover { border-color: var(--accent); }
 
-        /* Estilo para os Slots do Motor */
-        .slot-motor-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 5px 0; }
-        .label-mini { font-size: 0.6rem; color: #94a3b8; text-transform: uppercase; margin-top: 8px; display: block; }
+        input, textarea, select { 
+            width: 100%; background: #161b22; border: 1px solid #30363d; color: var(--accent); 
+            padding: 12px; border-radius: 8px; margin-top: 10px; font-weight: bold;
+        }
+        input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
+
+        .btn-main {
+            width: 100%; padding: 15px; margin-top: 15px; background: none;
+            border: 2px solid var(--accent); color: var(--accent); font-weight: 900;
+            text-transform: uppercase; border-radius: 8px; cursor: pointer;
+            font-family: 'Orbitron'; transition: 0.3s; overflow: hidden; position: relative;
+        }
+        .btn-main:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
+
+        .btn-pay { padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; border: 1px solid currentColor; background: none; }
+        .pay-ok { color: var(--success); box-shadow: inset 0 0 5px var(--success); }
+        .pay-no { color: var(--danger); box-shadow: inset 0 0 5px var(--danger); }
+
+        .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 150; }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div id="tutorial-overlay">
+        <div class="step-box" id="step-content">
+            <h2 id="step-title" style="color:var(--accent); margin-bottom:10px;">BEM-VINDO, ADMIN</h2>
+            <p id="step-text">Vamos configurar sua diária de elite em 3 passos rápidos.</p>
+            <div class="arrow-next" onclick="nextStep()">➜</div>
+        </div>
+    </div>
+
+    <div class="overlay-bg" id="overlay" onclick="toggleMenu()"></div>
 
     <nav class="sidebar" id="sidebar">
-        <h2 style="font-family: 'Orbitron'; color: var(--accent); margin-bottom: 20px; font-size: 1.2rem;">SISTEMA ASTRA</h2>
+        <h2 style="font-family: 'Orbitron'; color: var(--accent); margin-bottom: 25px; font-size: 1.2rem; text-shadow: 0 0 5px var(--accent);">DASHBOARD</h2>
         <div class="sidebar-item" onclick="showView('setup')">⚙️ Nova Diária</div>
-        <div class="sidebar-item" onclick="showView('pix')">💰 Gestão Financeira / PIX</div>
-        <div class="sidebar-item" onclick="showView('busca')">🔍 Buscar Jogador</div>
-        <div class="sidebar-item" onclick="showView('queda')">🎮 Lançar Queda</div>
-        <div class="sidebar-item" style="color: var(--danger); margin-top: 20px;" onclick="location.reload()">⚠️ Resetar Tudo</div>
+        <div class="sidebar-item" onclick="showView('pix')">💰 Finanças & PIX</div>
+        <div class="sidebar-item" onclick="showView('busca')">🔍 Busca de Nicks</div>
+        <div class="sidebar-item" onclick="showView('queda')">🎮 Motor de Quedas</div>
+        <div class="sidebar-item" style="color: var(--danger); margin-top: 20px; border-top: 1px solid #222;" onclick="location.reload()">⚠️ Resetar Sistema</div>
     </nav>
 
     <header class="header">
         <div class="menu-icon" onclick="toggleMenu()">☰</div>
-        <div class="logo">ASTRA FF</div>
-        <div style="width: 20px;"></div>
+        <div class="logo">ASTRA <span style="color:var(--neon-pink)">FF</span></div>
+        <div id="status-glow" style="width: 12px; height: 12px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success);"></div>
     </header>
 
     <div class="container">
         <div id="view-setup" class="view active">
-            <div class="card">
-                <h3>1. INICIAR DIÁRIA</h3>
-                <p style="font-size: 0.7rem; color: #94a3b8;">Cole a lista de times abaixo:</p>
-                <textarea id="input-lista-master" rows="10" placeholder="01- TIME ALPHA&#10;02- TIME BRAVO..."></textarea>
-                <button onclick="processarLista()" style="width:100%; padding:15px; margin-top:15px; background:var(--accent); border:none; border-radius:8px; font-weight:bold; cursor:pointer;">CADASTRAR TIMES</button>
+            <div class="card" style="border-top: 3px solid var(--accent);">
+                <h3>CONFIGURAÇÃO INICIAL</h3>
+                <textarea id="input-lista-master" rows="8" placeholder="Ex:&#10;01 - TIME LOUD&#10;02 - TIME PAIN..."></textarea>
+                <button onclick="processarLista()" class="btn-main">Iniciar Protocolo</button>
             </div>
         </div>
 
         <div id="view-pix" class="view">
             <div class="card">
-                <h3>2. GESTÃO FINANCEIRA & SLOTS</h3>
-                <p style="font-size: 0.7rem; color: #94a3b8; margin-bottom: 15px;">Defina quem pagou e os nicks dos jogadores.</p>
-                <div id="pix-list">
-                    <p style="text-align:center; color:#475569; font-size:0.8rem;">Cadastre a lista primeiro.</p>
-                </div>
+                <h3 style="color:var(--neon-pink)">CONTROLE DE SLOTS</h3>
+                <div id="pix-list"></div>
             </div>
         </div>
 
         <div id="view-busca" class="view">
             <div class="card">
-                <h3>🔍 BUSCA RÁPIDA</h3>
-                <input type="text" id="searchBar" placeholder="Pesquisar por Time ou Jogador..." onkeyup="renderizarBusca()">
+                <h3>TERMINAL DE BUSCA</h3>
+                <input type="text" id="searchBar" placeholder="Digite nick ou time..." onkeyup="renderizarBusca()">
                 <div id="search-results" style="margin-top: 15px;"></div>
             </div>
         </div>
 
         <div id="view-queda" class="view">
             <div class="card">
-                <h3>🎮 MOTOR DE QUEDAS</h3>
-                <p id="aviso-queda" style="text-align:center; padding:20px; color:#475569;">Cadastre os times para liberar o motor.</p>
+                <h3 style="color:var(--success)">SISTEMA DE PONTOS</h3>
                 <div id="motor-container"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- DATABASE ---
-        let db = {
-            times: [],
-            rodadaAtual: 1
-        };
+        let db = { times: [], rodadaAtual: 1 };
+        
+        // --- LOGICA TUTORIAL ---
+        let currentStep = 0;
+        const steps = [
+            { title: "BEM-VINDO AO ASTRA", text: "O painel mais rápido do FF. Clique na seta para aprender." },
+            { title: "1. CADASTRO", text: "Cole sua lista na 'Nova Diária' e clique em Iniciar Protocolo." },
+            { title: "2. GESTÃO", text: "No menu 'Finanças', você marca os pagamentos e salva os nicks." },
+            { title: "3. PONTUAÇÃO", text: "Em 'Motor de Quedas', você lança as posições. O resto eu faço sozinho!" }
+        ];
 
-        // --- NAVEGAÇÃO ---
+        function nextStep() {
+            currentStep++;
+            if(currentStep >= steps.length) {
+                document.getElementById('tutorial-overlay').style.display = 'none';
+                return;
+            }
+            document.getElementById('step-title').innerText = steps[currentStep].title;
+            document.getElementById('step-text').innerText = steps[currentStep].text;
+        }
+
+        // --- LÓGICA CORE ---
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
             const overlay = document.getElementById('overlay');
@@ -128,135 +185,84 @@
         function showView(viewName) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
-            if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
-            
-            // Se abrir a tela de queda, renderiza o motor
             if(viewName === 'queda') renderizarMotorQuedas();
+            toggleMenu();
         }
 
-        // --- LÓGICA DE DADOS (PARTE 2) ---
         function processarLista() {
-            const listaRaw = document.getElementById('input-lista-master').value;
-            if(!listaRaw.trim()) return alert("Insira a lista!");
-
-            db.times = listaRaw.split('\n').filter(l => l.trim()).map((linha, i) => {
-                return {
-                    id: i,
-                    nome: linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
-                    jogadores: "", pix: "", pago: false, killsTotal: 0, ptsTotal: 0, booyahs: 0, dq: false
-                };
-            });
-
+            const val = document.getElementById('input-lista-master').value;
+            if(!val) return;
+            db.times = val.split('\n').filter(l => l.trim()).map((l, i) => ({
+                id: i, nome: l.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
+                jogadores: "", pix: "", pago: false, killsTotal: 0, ptsTotal: 0, booyahs: 0, dq: false
+            }));
             renderizarGestaoFinanceira();
-            alert("Times cadastrados!");
             showView('pix');
         }
 
         function renderizarGestaoFinanceira() {
             const container = document.getElementById('pix-list');
-            if(db.times.length === 0) return;
             container.innerHTML = db.times.map(t => `
-                <div class="card" style="background:#0f172a; margin-bottom:10px; border-left: 4px solid ${t.pago ? 'var(--success)' : 'var(--danger)'}">
+                <div class="card" style="background:#0a0e14; border-left: 3px solid ${t.pago ? 'var(--success)' : 'var(--danger)'}">
                     <div style="display:flex; justify-content:space-between; align-items:center">
-                        <span style="font-weight:800; font-size:0.8rem;">${t.nome}</span>
+                        <span style="font-weight:bold; color:var(--accent)">${t.nome}</span>
                         <button class="btn-pay ${t.pago ? 'pay-ok' : 'pay-no'}" onclick="db.times[${t.id}].pago = !db.times[${t.id}].pago; renderizarGestaoFinanceira();">
                             ${t.pago ? 'PAGO' : 'PENDENTE'}
                         </button>
                     </div>
                     <input type="text" placeholder="PIX" value="${t.pix}" onchange="db.times[${t.id}].pix = this.value">
-                    <input type="text" placeholder="Nicks" value="${t.jogadores}" onchange="db.times[${t.id}].jogadores = this.value">
+                    <input type="text" placeholder="NICKS" value="${t.jogadores}" onchange="db.times[${t.id}].jogadores = this.value">
                 </div>
             `).join('');
+        }
+
+        function renderizarMotorQuedas() {
+            const container = document.getElementById('motor-container');
+            if(db.times.length === 0) return;
+            container.innerHTML = `<div style="text-align:center; color:var(--accent); font-weight:900; margin-bottom:15px">SALA ATUAL: ${db.rodadaAtual}</div>` + 
+            db.times.map(t => `
+                <div class="card" style="background:#0a0e14; margin-bottom:8px">
+                    <div onclick="const s = this.nextElementSibling; s.style.display = s.style.display === 'none' ? 'grid' : 'none'" style="cursor:pointer; display:flex; justify-content:space-between">
+                        <span>▼ ${t.nome}</span>
+                        <span style="color:var(--accent)">${t.ptsTotal} PTS</span>
+                    </div>
+                    <div style="display:none; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px">
+                        <input type="number" id="pos_${t.id}" placeholder="Posição">
+                        <input type="number" id="kil_${t.id}" placeholder="Kills">
+                    </div>
+                </div>
+            `).join('') + `<button onclick="finalizarQueda()" class="btn-main" style="border-color:var(--success); color:var(--success)">Salvar Queda</button>
+            <div id="ranking-final"></div>`;
+        }
+
+        function finalizarQueda() {
+            const pts = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
+            db.times.forEach(t => {
+                const p = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
+                const k = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
+                t.ptsTotal += (pts[p] || 0) + k;
+                t.killsTotal += k;
+                if(p === 1) t.booyahs++;
+            });
+            db.rodadaAtual++;
+            renderizarMotorQuedas();
+            renderTabela();
+        }
+
+        function renderTabela() {
+            const area = document.getElementById('ranking-final');
+            const sorted = [...db.times].sort((a,b) => b.ptsTotal - a.ptsTotal);
+            area.innerHTML = `<h4 style="margin:20px 0 10px; color:var(--accent)">RANKING ATUALIZADO</h4>` +
+            `<table style="width:100%; font-size:0.8rem; border-collapse:collapse">` +
+            sorted.map((t, i) => `<tr style="border-bottom:1px solid #222"><td style="padding:8px">${i+1}º</td><td>${t.nome}</td><td style="color:var(--accent)">${t.ptsTotal}</td></tr>`).join('') + 
+            `</table>`;
         }
 
         function renderizarBusca() {
             const list = document.getElementById('search-results');
             const termo = document.getElementById('searchBar').value.toUpperCase();
-            if(!termo) { list.innerHTML = ""; return; }
             const filtrados = db.times.filter(t => t.nome.includes(termo) || t.jogadores.toUpperCase().includes(termo));
-            list.innerHTML = filtrados.map(t => `
-                <div style="padding:10px; background:#1e293b; border-radius:8px; margin-bottom:5px; border:1px solid #334155">
-                    <div style="color:var(--accent); font-weight:bold; font-size:0.8rem">${t.nome}</div>
-                    <div style="font-size:0.65rem; color:#94a3b8">JOGADORES: ${t.jogadores || 'Não informados'}</div>
-                </div>
-            `).join('');
-        }
-
-        // --- MOTOR DE QUEDAS (PARTE 3 INTEGRADA) ---
-        function renderizarMotorQuedas() {
-            const container = document.getElementById('motor-container');
-            const aviso = document.getElementById('aviso-queda');
-            if(db.times.length === 0) return;
-            aviso.style.display = "none";
-
-            container.innerHTML = `
-                <div style="text-align:center; margin-bottom:15px">
-                    <span style="background:var(--accent); color:#000; padding:5px 10px; border-radius:5px; font-weight:900; font-size:0.7rem">SALA ${db.rodadaAtual} ATIVA</span>
-                </div>
-            ` + db.times.map(t => `
-                <div class="card" style="background:#0f172a; padding:10px; margin-bottom:8px; border:1px solid #334155">
-                    <div class="slot-motor-header" onclick="const s = this.nextElementSibling; s.style.display = s.style.display === 'none' ? 'grid' : 'none'">
-                        <span style="font-weight:800; font-size:0.8rem">▼ ${t.nome}</span>
-                        <span style="color:var(--accent); font-size:0.7rem">${t.ptsTotal} PTS</span>
-                    </div>
-                    <div style="display:none; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px">
-                        <div><span class="label-mini">Status</span><select id="st_${t.id}"><option value="NORMAL">NORMAL</option><option value="DQ">DQ</option></select></div>
-                        <div><span class="label-mini">Punição</span><input type="number" id="pun_${t.id}" placeholder="0"></div>
-                        <div><span class="label-mini">Posição</span><input type="number" id="pos_${t.id}" placeholder="1-12"></div>
-                        <div><span class="label-mini">Kills</span><input type="number" id="kil_${t.id}" placeholder="0"></div>
-                    </div>
-                </div>
-            `).join('') + `
-                <button onclick="confirmarQueda()" style="width:100%; padding:15px; background:var(--success); border:none; border-radius:8px; color:white; font-weight:bold; margin-top:10px; cursor:pointer">ENCERRAR QUEDA ${db.rodadaAtual}</button>
-                <div id="print-area" style="margin-top:20px;"></div>
-            `;
-        }
-
-        function confirmarQueda() {
-            if(!confirm("Encerrar queda e somar pontos?")) return;
-            const ptsLBFF = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
-            db.times.forEach(t => {
-                const st = document.getElementById(`st_${t.id}`).value;
-                const pun = parseInt(document.getElementById(`pun_${t.id}`).value) || 0;
-                if(st === "NORMAL") {
-                    const pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
-                    const kil = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
-                    t.ptsTotal += (ptsLBFF[pos] || 0) + kil - pun;
-                    t.killsTotal += kil;
-                    if(pos === 1) t.booyahs++;
-                } else { t.ptsTotal -= pun; t.dq = (st === "DQ"); }
-            });
-            db.rodadaAtual++;
-            renderizarMotorQuedas();
-            renderizarTabela();
-        }
-
-        function renderizarTabela() {
-            const area = document.getElementById('print-area');
-            const sorted = [...db.times].sort((a,b) => b.ptsTotal - a.ptsTotal || b.booyahs - a.booyahs || b.killsTotal - a.killsTotal);
-            area.innerHTML = `
-                <table style="width:100%; border-collapse:collapse; font-size:0.75rem; background:#1e293b; border-radius:8px; overflow:hidden">
-                    <tr style="background:#0f172a; color:#64748b"><th style="padding:10px">#</th><th style="text-align:left">TIME</th><th>K</th><th>PTS</th></tr>
-                    ${sorted.map((t, i) => `
-                        <tr style="border-bottom:1px solid #334155; ${t.dq?'opacity:0.4':''}">
-                            <td style="padding:10px; text-align:center; color:${i<3?'var(--gold)':'white'}">${i+1}º</td>
-                            <td>${t.nome} ${'🏆'.repeat(t.booyahs)}<br><small style="color:#64748b">${t.jogadores}</small></td>
-                            <td style="text-align:center">${t.killsTotal}</td>
-                            <td style="text-align:center; color:var(--accent); font-weight:bold">${t.ptsTotal}</td>
-                        </tr>
-                    `).join('')}
-                </table>
-                <button onclick="copiarZap()" style="width:100%; margin-top:10px; padding:12px; background:#22c55e; border:none; border-radius:6px; color:white; font-weight:bold; cursor:pointer">COPIAR RESULTADO (ZAP)</button>
-            `;
-        }
-
-        function copiarZap() {
-            let txt = `🏆 *ASTRA FF - RANKING* 🏆\n\n`;
-            [...db.times].sort((a,b) => b.ptsTotal - a.ptsTotal).forEach((t, i) => {
-                txt += `${i+1}º *${t.nome}* | ${t.ptsTotal} pts\n`;
-            });
-            navigator.clipboard.writeText(txt);
-            alert("Ranking copiado!");
+            list.innerHTML = filtrados.map(t => `<div class="card" style="margin-bottom:5px; padding:10px">${t.nome}<br><small style="color:var(--accent)">${t.jogadores}</small></div>`).join('');
         }
     </script>
 </body>
