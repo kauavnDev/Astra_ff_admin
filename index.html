@@ -18,9 +18,7 @@
     <header class="header">
         <div class="header-left">
             <div class="menu-btn" onclick="toggleMenu()"><i class="ph-bold ph-list"></i></div>
-            <div class="info-pill">
-                <span id="round-hud">Q1</span>
-            </div>
+            <div class="info-pill"><span id="round-hud">Q1</span></div>
         </div>
         <div class="logo-central">ASTRA <span>FF</span></div>
         <div class="header-right">
@@ -30,12 +28,12 @@
 
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2 class="sidebar-logo">SISTEMA <span>ASTRA</span></h2>
-            <p class="sidebar-ver">ADMIN v5.0</p>
+            <h2 class="sidebar-logo">PAINEL <span>ASTRA</span></h2>
+            <p class="sidebar-ver">ADMIN ELITE v5.0</p>
         </div>
         <div class="sidebar-content">
             <div class="sidebar-item active" onclick="showView('setup')"><i class="ph-bold ph-gear"></i> Nova Diária</div>
-            <div class="sidebar-item" onclick="showView('pix')"><i class="ph-bold ph-currency-dollar"></i> Gestão / PIX</div>
+            <div class="sidebar-item" onclick="showView('pix')"><i class="ph-bold ph-currency-dollar"></i> Gestão & PIX</div>
             <div class="sidebar-item" onclick="showView('queda')"><i class="ph-bold ph-game-controller"></i> Motor de Queda</div>
             <hr class="divider">
             <div class="sidebar-item" onclick="verHistorico()"><i class="ph-bold ph-clock-counter-clockwise"></i> Ver Histórico</div>
@@ -49,7 +47,7 @@
         
         <section id="view-setup" class="view active">
             <div class="card-main">
-                <h3 class="title-view"><i class="ph-bold ph-rocket-launch"></i> CONFIGURAÇÃO</h3>
+                <h3 class="title-view"><i class="ph-bold ph-rocket-launch"></i> CONFIGURAÇÃO INICIAL</h3>
                 
                 <div class="mode-selector">
                     <button class="m-btn active" onclick="setMode('SOLO', 48, this)">SOLO (48)</button>
@@ -59,30 +57,31 @@
 
                 <div class="ocr-area">
                     <label for="ocr-upload" class="ocr-label">
-                        <i class="ph-bold ph-camera"></i> LER PRINT DO LOBBY (OCR)
+                        <i class="ph-bold ph-camera"></i> LER PRINT DO LOBBY
                     </label>
                     <input type="file" id="ocr-upload" accept="image/*" class="hidden">
                 </div>
 
-                <textarea id="lista-raw" placeholder="Ou cole a lista manual:&#10;01- NOME DO TIME..."></textarea>
+                <textarea id="lista-raw" placeholder="Cole a lista manual aqui...&#10;Ex:&#10;01- LOUD&#10;02- PAIN..."></textarea>
                 
-                <button class="btn-next" onclick="processarLista()">CADASTRAR E AVANÇAR <i class="ph-bold ph-arrow-right"></i></button>
+                <button class="btn-next" onclick="processarLista()">CADASTRAR TIMES <i class="ph-bold ph-arrow-right"></i></button>
             </div>
         </section>
 
         <section id="view-pix" class="view">
             <div class="card-main">
-                <h3 class="title-view"><i class="ph-bold ph-users-three"></i> GESTÃO & PIX</h3>
+                <h3 class="title-view"><i class="ph-bold ph-currency-dollar"></i> CONTROLE FINANCEIRO</h3>
+                <p class="subtitle">Guarde nicks e referências de pagamento:</p>
                 <div id="pix-list" class="scroll-area">
                     </div>
-                <button class="btn-next" onclick="showView('queda')">ABRIR MOTOR DE QUEDAS <i class="ph-bold ph-game-controller"></i></button>
+                <button class="btn-next" onclick="showView('queda')">INICIAR COMPETIÇÃO <i class="ph-bold ph-play"></i></button>
             </div>
         </section>
 
         <section id="view-queda" class="view">
             <div class="motor-info-bar">
                 <div class="info-badge" id="round-label">QUEDA #1</div>
-                <div class="info-badge" id="limit-label">CARREGANDO...</div>
+                <div class="info-badge" id="limit-label">AGUARDANDO...</div>
             </div>
             
             <div id="motor-container">
@@ -90,17 +89,17 @@
 
             <div class="admin-tools-grid">
                 <button class="btn-tool" onclick="verHistorico()"><i class="ph-bold ph-clock-counter-clockwise"></i> LOGS</button>
-                <button class="btn-tool" onclick="recalcularTabela()"><i class="ph-bold ph-calculator"></i> CALC</button>
+                <button class="btn-tool" onclick="recalcularTabela()"><i class="ph-bold ph-calculator"></i> RECALC</button>
                 <button class="btn-tool danger" onclick="limparQuedaAtual()"><i class="ph-bold ph-trash"></i> LIMPAR</button>
             </div>
 
-            <button class="btn-finalize" onclick="finalizarQueda()">FINALIZAR E PONTUAR</button>
+            <button class="btn-finalize" onclick="finalizarQueda()">FINALIZAR QUEDA</button>
 
             <div id="ranking-area" class="hidden">
                 <div id="capture-zone" class="ranking-visual">
                     <div class="ranking-banner">
-                        <h4 id="ranking-title-visual">RANKING ATUALIZADO</h4>
-                        <p id="rank-info-footer">SISTEMA ASTRA ELITE</p>
+                        <h4>RANKING ATUALIZADO</h4>
+                        <p id="rank-info-footer">DIÁRIA ASTRA ELITE</p>
                     </div>
                     <div class="table-responsive">
                         <table id="tabela-ranking">
@@ -110,7 +109,7 @@
 
                 <div class="sharing-grid">
                     <button class="btn-share wa" onclick="copiarTexto()"><i class="ph-bold ph-whatsapp-logo"></i> TEXTO</button>
-                    <button class="btn-share camera" onclick="baixarPrint()"><i class="ph-bold ph-camera"></i> SALVAR FOTO</button>
+                    <button class="btn-share camera" onclick="baixarPrint()"><i class="ph-bold ph-camera"></i> FOTO</button>
                 </div>
             </div>
         </section>
@@ -119,7 +118,7 @@
 
     <div id="modal-historico" class="modal hidden">
         <div class="modal-content card-main">
-            <h3 class="title-view">HISTÓRICO DE QUEDAS</h3>
+            <h3 class="title-view">HISTÓRICO DE ROUNDS</h3>
             <div id="log-content" class="scroll-area"></div>
             <button class="btn-next" onclick="fecharModal()">FECHAR</button>
         </div>
