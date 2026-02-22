@@ -1,36 +1,50 @@
 /**
- * ASTRA FF - ELITE ENGINE v4.5
- * Core: Gestão de Modos, Streak System & Image Capture
+ * ASTRA FF - ULTIMATE ENGINE v5.0
+ * Foco: Histórico, Persistência e Formatação Elite
  */
 
 let db = {
     times: [],
-    queda: 1,
+    quedas: [], // Aqui fica o histórico de cada round
+    rodadaAtual: 1,
     modo: 'SOLO',
     maxTimes: 48
 };
 
-// 1. NAVEGAÇÃO E HUD
+// --- INICIALIZAÇÃO COM AUTO-SAVE ---
+window.onload = () => {
+    const saved = localStorage.getItem('astra_db');
+    if (saved) {
+        db = JSON.parse(saved);
+        if (db.times.length > 0) {
+            renderPix();
+            renderMotor();
+            if (db.quedas.length > 0) renderRanking();
+        }
+    }
+    atualizarRelogio();
+};
+
+function save() {
+    localStorage.setItem('astra_db', JSON.stringify(db));
+}
+
+// --- NAVEGAÇÃO ---
 function toggleMenu() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    sidebar.classList.toggle('active');
-    overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('overlay');
+    sb.classList.toggle('active');
+    ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
 }
 
 function showView(viewId) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + viewId).classList.add('active');
-    
     if(viewId === 'queda') renderMotor();
-    if(viewId === 'pix') renderPix();
-    
-    // Fecha o menu automaticamente após clicar
     if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
-    window.scrollTo(0,0);
 }
 
-// 2. CONFIGURAÇÃO DE MODO
+// --- CONFIGURAÇÃO ---
 function setMode(name, max, btn) {
     db.modo = name;
     db.maxTimes = max;
@@ -38,144 +52,77 @@ function setMode(name, max, btn) {
     btn.classList.add('active');
 }
 
-// 3. PROCESSAMENTO DA LISTA
 function processarLista() {
     const raw = document.getElementById('lista-raw').value;
-    if(!raw.trim()) return alert("Erro: Cole a lista de times!");
+    if(!raw.trim()) return alert("Cole a lista!");
 
-    // Divide a lista e respeita o limite do modo escolhido
     const linhas = raw.split('\n').filter(l => l.trim()).slice(0, db.maxTimes);
-    
     db.times = linhas.map((linha, i) => ({
         id: i,
         nome: linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
-        pago: false,
-        nicks: "",
-        pts: 0,
-        kills: 0,
-        booyahs: 0,
-        streak: 0, // Contador de vitórias seguidas
-        lastWin: false
+        pago: false, nicks: "", pts: 0, kills: 0, booyahs: 0, streak: 0, statusGeral: "ATIVO"
     }));
 
-    alert(`Sucesso! ${db.times.length} times cadastrados no modo ${db.modo}.`);
-    showView('pix'); // Avança automaticamente
+    db.quedas = [];
+    db.rodadaAtual = 1;
+    save();
+    showView('pix');
 }
 
-// 4. GESTÃO FINANCEIRA (PIX)
-function renderPix() {
-    const container = document.getElementById('pix-list');
-    if(db.times.length === 0) return container.innerHTML = "<p>Nenhum time cadastrado.</p>";
-
-    container.innerHTML = db.times.map(t => `
-        <div class="card-main" style="border-left: 5px solid ${t.pago ? 'var(--success)' : 'var(--danger)'}">
-            <div style="display:flex; justify-content:space-between; align-items:center">
-                <span style="font-weight:800; font-size:0.8rem">#${t.id+1} ${t.nome}</span>
-                <button onclick="togglePago(${t.id})" class="m-btn" style="background:${t.pago?'var(--success)':'var(--danger)'}; width:100px; padding:5px">
-                    ${t.pago ? 'PAGO' : 'PENDENTE'}
-                </button>
-            </div>
-            <input type="text" placeholder="Nicks dos jogadores" value="${t.nicks}" onchange="db.times[${t.id}].nicks = this.value" style="margin-top:10px">
-        </div>
-    `).join('');
-}
-
-function togglePago(id) {
-    db.times[id].pago = !db.times[id].pago;
-    renderPix();
-}
-
-// 5. MOTOR DE QUEDAS (LANÇAMENTO)
-function renderMotor() {
-    const container = document.getElementById('motor-container');
-    document.getElementById('round-label').innerText = `QUEDA #${db.queda}`;
-    document.getElementById('limit-label').innerText = `${db.modo} - ${db.times.length} TIMES`;
-
-    container.innerHTML = db.times.map(t => `
-        <div class="slot-queda">
-            <div class="slot-head" onclick="toggleSlot(this)">
-                <span>${t.nome} ${t.streak >= 2 ? '<span class="win-streak">🔥 '+t.streak+'</span>' : ''}</span>
-                <span style="color:var(--accent)">${t.pts} PTS</span>
-            </div>
-            <div class="slot-content">
-                <div><label>STATUS</label>
-                    <select id="st_${t.id}">
-                        <option value="N">NORMAL</option>
-                        <option value="DQ">DQ (BAN)</option>
-                        <option value="WO">W.O.</option>
-                    </select>
-                </div>
-                <div><label>PUNIÇÃO (-)</label><input type="number" id="pun_${t.id}" value="0"></div>
-                <div><label>POSIÇÃO</label><input type="number" id="pos_${t.id}" placeholder="1-12"></div>
-                <div><label>KILLS</label><input type="number" id="kil_${t.id}" placeholder="0"></div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function toggleSlot(el) {
-    const content = el.nextElementSibling;
-    content.style.display = content.style.display === 'grid' ? 'none' : 'grid';
-}
-
-// 6. CÁLCULO DE PONTOS E RANKING
+// --- MOTOR DE QUEDAS (MECÂNICA LBFF) ---
 function finalizarQueda() {
-    if(!confirm(`Deseja encerrar a Queda #${db.queda} e somar os pontos?`)) return;
+    if(!confirm(`Finalizar Queda ${db.rodadaAtual}?`)) return;
     
     const pontuacaoLBFF = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
+    let logQueda = { round: db.rodadaAtual, resultados: [] };
 
     db.times.forEach(t => {
-        const status = document.getElementById(`st_${t.id}`).value;
-        const punicao = parseInt(document.getElementById(`pun_${t.id}`).value) || 0;
-        
-        if(status === "N") {
-            const pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
-            const kills = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
-            
-            // Soma pontos
-            t.pts += (pontuacaoLBFF[pos] || 0) + kills - punicao;
-            t.kills += kills;
+        const st = document.getElementById(`st_${t.id}`).value;
+        const pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
+        const kil = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
+        const pun = parseInt(document.getElementById(`pun_${t.id}`).value) || 0;
 
-            // Lógica de Booyah e Streak (Foguinho)
-            if(pos === 1) {
-                t.booyahs++;
-                t.streak++;
-            } else {
-                t.streak = 0; // Perde o foguinho se não ganhar
-            }
+        let ptsRodada = 0;
+        if(st === "N") {
+            ptsRodada = (pontuacaoLBFF[pos] || 0) + kil - pun;
+            t.pts += ptsRodada;
+            t.kills += kil;
+            if(pos === 1) { t.booyahs++; t.streak++; } else { t.streak = 0; }
         } else {
-            // Se for DQ ou WO, apenas retira punição se houver
-            t.pts -= punicao;
+            ptsRodada = -pun;
+            t.pts += ptsRodada;
             t.streak = 0;
         }
+
+        logQueda.resultados.push({ id: t.id, nome: t.nome, pts: ptsRodada, pos: pos, kills: kil, status: st });
+        
+        // Limpar campos para a próxima
+        document.getElementById(`pos_${t.id}`).value = "";
+        document.getElementById(`kil_${t.id}`).value = "";
+        document.getElementById(`pun_${t.id}`).value = "0";
     });
 
-    db.queda++;
+    db.quedas.push(logQueda);
+    db.rodadaAtual++;
+    save();
     renderRanking();
-    renderMotor();
-    window.scrollTo(0, document.body.scrollHeight);
+    alert("Queda Processada!");
 }
 
+// --- RANKING & COMPARTILHAMENTO ---
 function renderRanking() {
     document.getElementById('ranking-area').classList.remove('hidden');
     const table = document.getElementById('tabela-ranking');
     const sorted = [...db.times].sort((a,b) => b.pts - a.pts || b.booyahs - a.booyahs || b.kills - a.kills);
 
-    table.innerHTML = `
-        <tr>
-            <th>#</th>
-            <th>TIME / JOGADORES</th>
-            <th style="text-align:center">K</th>
-            <th style="text-align:center">PTS</th>
-        </tr>
-    ` + sorted.map((t, i) => `
+    table.innerHTML = `<tr><th>#</th><th>TIME</th><th style="text-align:center">K</th><th style="text-align:center">PTS</th></tr>` + 
+    sorted.map((t, i) => `
         <tr>
             <td style="font-weight:900; color:${i<3?'var(--accent)':'white'}">${i+1}º</td>
             <td>
-                <span style="font-weight:800">${t.nome}</span> 
-                ${t.streak >= 2 ? '<span class="win-streak">🔥'+t.streak+'</span>' : ''}
+                ${t.nome} ${t.streak >= 2 ? '<span class="win-streak">🔥'+t.streak+'</span>' : ''}
                 ${t.booyahs > 0 ? ' 🏆'.repeat(t.booyahs) : ''}
-                <br><small style="color:#64748b">${t.nicks || '---'}</small>
+                <br><small style="color:#64748b">${t.nicks || 'Sem Nick'}</small>
             </td>
             <td style="text-align:center">${t.kills}</td>
             <td style="text-align:center; font-weight:900; color:var(--accent)">${t.pts}</td>
@@ -183,35 +130,41 @@ function renderRanking() {
     `).join('');
 }
 
-// 7. COMPARTILHAMENTO
+// FORMATO ELITE WHATSAPP
 function copiarTexto() {
-    let texto = `📊 *ASTRA FF - RANKING ATUALIZADO*\n*QUEDA ${db.queda-1} FINALIZADA*\n\n`;
+    const emojiModo = db.modo === 'SOLO' ? '👤' : db.modo === 'DUO' ? '👥' : '🎖️';
+    let txt = `🏆 *ASTRA FF - ${db.modo}* 🏆\n`;
+    txt += `📅 *QUEDA:* ${db.rodadaAtual - 1} | *SALA:* ATIVA\n`;
+    txt += `─`.repeat(15) + `\n\n`;
+
     const sorted = [...db.times].sort((a,b) => b.pts - a.pts);
-    
     sorted.forEach((t, i) => {
-        texto += `${i+1}º ${t.nome} - ${t.pts} pts ${t.streak >= 2 ? '🔥' : ''}\n`;
+        const medalha = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}º`;
+        const foguinho = t.streak >= 2 ? ` 🔥${t.streak}` : '';
+        txt += `${medalha} *${t.nome}*${foguinho} | Pts: *${t.pts}*\n`;
     });
 
-    navigator.clipboard.writeText(texto).then(() => {
-        alert("Texto copiado para o WhatsApp!");
-    });
+    txt += `\n🚀 *Powered by Astra Elite Hub*`;
+    
+    navigator.clipboard.writeText(txt);
+    alert("Ranking formatado para WhatsApp!");
 }
 
+// --- UTILITÁRIOS ---
+function atualizarRelogio() {
+    setInterval(() => {
+        const d = new Date();
+        document.getElementById('digital-clock').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
+    }, 1000);
+}
+
+// Função para abrir o print (Ajustada para Mobile)
 function baixarPrint() {
     const area = document.getElementById('capture-zone');
-    html2canvas(area, { backgroundColor: '#020617' }).then(canvas => {
-        const base64image = canvas.toDataURL("image/png");
+    html2canvas(area, { backgroundColor: '#020617', scale: 2 }).then(canvas => {
         const link = document.createElement('a');
-        link.download = `Ranking_Astra_Queda_${db.queda-1}.png`;
-        link.href = base64image;
+        link.download = `ASTRA_RANKING_Q${db.rodadaAtual-1}.png`;
+        link.href = canvas.toDataURL();
         link.click();
     });
 }
-
-// Relógio HUD
-setInterval(() => {
-    const now = new Date();
-    document.getElementById('digital-clock').innerText = 
-        String(now.getHours()).padStart(2, '0') + ":" + 
-        String(now.getMinutes()).padStart(2, '0');
-}, 1000);
