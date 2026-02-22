@@ -3,226 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Astra FF - Painel de Diárias</title>
+    <title>ASTRA FF - ELITE MANAGER</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        body { background-color: #0f172a; color: #f8fafc; padding-bottom: 50px; }
-        .navbar { background-color: #1e293b; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; }
-        .navbar h1 { color: #fbbf24; font-size: 1.5rem; }
-        .btn-sair { background-color: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .container { padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; }
-        .card { background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .card h3 { color: #fbbf24; margin-bottom: 10px; font-size: 1.2rem; }
-        textarea { width: 100%; background-color: #334155; color: white; border: 1px solid #475569; padding: 12px; border-radius: 5px; margin-bottom: 15px; font-size: 1rem; }
-        .btn-verde { background-color: #22c55e; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; }
-        .btn-azul { background-color: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
-        .btn-vermelho { background-color: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9rem; margin-left: 10px;}
-        .btn-roxo { background-color: #8b5cf6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; }
-        .input-file { width: 100%; background-color: #0f172a; color: white; border: 1px dashed #475569; padding: 15px; border-radius: 5px; margin-bottom: 15px; font-size: 1rem; text-align: center; }
-        .area-exportacao { display: flex; gap: 10px; margin-top: 15px; display: none; flex-wrap: wrap; }
-        .btn-wpp { background-color: #25D366; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 200px; }
-        .btn-img { background-color: #a855f7; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 200px; }
-        .grid-slots { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-        .slot-item { background-color: #334155; padding: 12px; border-radius: 5px; border-left: 5px solid #fbbf24; display: flex; flex-direction: column; gap: 10px; }
-        .slot-header { display: flex; justify-content: space-between; align-items: center; }
-        .slot-nome { color: white; font-weight: bold; font-size: 1.1rem; }
-        .input-pix { background-color: #0f172a; color: #94a3b8; border: 1px solid #475569; padding: 6px; border-radius: 4px; font-size: 0.8rem; width: 100%; }
-        .slot-controles { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;}
-        .input-pequeno { width: 60px; background-color: #0f172a; color: white; border: 1px solid #475569; padding: 8px; border-radius: 4px; text-align: center; font-weight: bold; }
-        .input-punicao { width: 65px; background-color: #450a0a; color: #fca5a5; border: 1px solid #ef4444; padding: 8px; border-radius: 4px; text-align: center; font-weight: bold; }
-        .select-status { background-color: #0f172a; color: white; border: 1px solid #475569; padding: 8px; border-radius: 4px; font-weight: bold; }
-        .btn-financeiro { padding: 8px; border-radius: 4px; border: none; font-weight: bold; cursor: pointer; width: 85px; font-size: 0.8rem; }
-        .pago { background-color: #064e3b; color: #34d399; border: 1px solid #059669; }
-        .pendente { background-color: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #1e293b; border-radius: 5px; overflow: hidden; }
-        th { background-color: #334155; padding: 12px; text-align: center; color: #cbd5e1; font-size: 0.8rem; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid #334155; text-align: center; }
-        .posicao { color: #fbbf24; font-weight: bold; font-size: 1.1rem; }
-        .pontos-total { color: #4ade80; font-weight: bold; font-size: 1.2rem; }
-        .tag-status { font-size: 0.7rem; padding: 2px 5px; border-radius: 3px; background-color: #ef4444; color: white; margin-left: 5px; }
-        .info-queda { background-color: #1e293b; border: 1px solid #fbbf24; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; color: #fbbf24; margin-bottom: 15px; }
+        :root { 
+            --bg: #020617; --card: #1e293b; --accent: #fbbf24; 
+            --gold: #f59e0b; --silver: #94a3b8; --bronze: #78350f;
+            --neon: 0 0 10px rgba(251, 191, 36, 0.4);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: #f8fafc; padding-bottom: 50px; }
+        
+        /* Header Estilo Garena */
+        .header { 
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            padding: 25px; text-align: center; border-bottom: 3px solid var(--accent);
+            box-shadow: var(--neon);
+        }
+        .header h1 { font-family: 'Orbitron', sans-serif; font-weight: 900; letter-spacing: 4px; color: var(--accent); text-shadow: 2px 2px #000; font-size: 1.6rem; }
+        .header p { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; margin-top: 5px; }
+
+        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
+        
+        .card { 
+            background: var(--card); border-radius: 15px; padding: 20px; margin-bottom: 20px;
+            border: 1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        h3 { font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 15px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+
+        textarea { 
+            width: 100%; background: #0f172a; color: #fff; border: 2px solid #334155; 
+            padding: 15px; border-radius: 10px; font-size: 1rem; margin-bottom: 15px; transition: 0.3s;
+        }
+        textarea:focus { border-color: var(--accent); outline: none; box-shadow: var(--neon); }
+
+        .btn { 
+            width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 900; 
+            text-transform: uppercase; cursor: pointer; transition: 0.3s; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+        }
+        .btn-main { background: var(--accent); color: #000; box-shadow: 0 4px 0 #b45309; }
+        .btn-main:active { transform: translateY(4px); box-shadow: none; }
+        
+        .slot-item { background: #0f172a; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #334155; }
+        .slot-name { font-weight: 900; color: #cbd5e1; margin-bottom: 10px; display: block; font-size: 0.9rem; }
+        .inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-ff { background: #1e293b; border: 1px solid #475569; color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; }
+
+        /* Tabela Profissional */
+        .table-container { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #0f172a; padding: 12px; color: #64748b; font-size: 0.7rem; text-transform: uppercase; }
+        td { padding: 14px; text-align: center; border-bottom: 1px solid #334155; font-weight: 700; }
+
+        /* Medalhas Neon */
+        .rank-1 { color: var(--gold); text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); font-size: 1.2rem; }
+        .rank-2 { color: var(--silver); }
+        .rank-3 { color: var(--bronze); }
+
+        /* Histórico */
+        .history-item { 
+            background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 8px; 
+            font-size: 0.8rem; border-left: 3px solid var(--accent); display: flex; justify-content: space-between;
+        }
+
+        .export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-zap { background: #22c55e; color: #fff; }
+        .btn-print { background: #8b5cf6; color: #fff; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <h1>🏆 Astra FF Admin</h1>
-        <button class="btn-sair">Sair</button>
-    </nav>
+<div class="header">
+    <h1>ASTRA FF</h1>
+    <p>Tournament Management System</p>
+</div>
 
-    <div class="container">
+<div class="container">
+    <div class="card" id="view-setup">
+        <h3>📝 NOVA DIÁRIA</h3>
+        <textarea id="lista-input" rows="8" placeholder="1 - TIME A&#10;2 - TIME B..."></textarea>
+        <button class="btn btn-main" onclick="iniciarCamp()">GERAR COMPETIÇÃO</button>
         
-        <div class="card" id="sessaoOCR">
-            <h3>📸 1. Leitura Inteligente (OCR)</h3>
-            <p style="margin-bottom: 5px; font-size: 0.9rem;">Suba o print do lobby para gerar os nomes.</p>
-            <input type="file" id="printLobby" accept="image/*" class="input-file">
-            <button class="btn-roxo" onclick="processarPrintOCR()">🤖 Astra, analise este print</button>
-            <p id="statusOCR" style="color: #fbbf24; text-align: center; font-weight: bold; display: none; margin-top: 10px;">IA Lendo print... ⏳</p>
-        </div>
-
-        <div class="card" id="sessaoCadastro">
-            <h3>📝 2. Lista de Times</h3>
-            <textarea id="listaTimes" rows="6" placeholder="Os nomes aparecerão aqui após o OCR ou digite manualmente..."></textarea>
-            <button class="btn-verde" onclick="iniciarCampeonato()">Iniciar Campeonato</button>
-        </div>
-
-        <div class="card" id="sessaoResultados" style="display: none;">
-            <div class="info-queda" id="textoQuedaAtual">QUEDA 1</div>
-            <div id="areaSlots"></div>
-            <button class="btn-azul" onclick="salvarQueda()">Salvar Queda e Atualizar Tabela</button>
-        </div>
-
-        <div class="card" id="cartaoTabelaFinal">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>📊 Tabela Geral</h3>
-                <button class="btn-vermelho" onclick="resetarTudo()" id="btnReset" style="display: none;">Resetar</button>
-            </div>
-            <div id="areaTabela" style="overflow-x: auto;">
-                <p style="color: #64748b; font-style: italic; margin-top: 15px;">Aguardando início...</p>
-            </div>
-        </div>
-
-        <div class="area-exportacao" id="areaExportacao">
-            <button class="btn-wpp" onclick="copiarWhatsApp()">🟢 WhatsApp</button>
-            <button class="btn-img" onclick="baixarImagem()">📸 Instagram</button>
+        <div id="historico-box" style="margin-top: 25px; display:none">
+            <h3 style="font-size: 0.7rem; color: #64748b;">🏆 ÚLTIMOS RESULTADOS</h3>
+            <div id="history-list"></div>
         </div>
     </div>
 
-    <script>
-        let times = []; 
-        let quedaAtual = 1;
-        let timesOrdenadosGlobais = []; 
-        const pontosLBFF = { 1: 12, 2: 9, 3: 8, 4: 7, 5: 6, 6: 5, 7: 4, 8: 3, 9: 2, 10: 1, 11: 0, 12: 0 };
+    <div class="card" id="view-scores" style="display:none">
+        <h3 id="label-queda">LANÇANDO QUEDA 1</h3>
+        <div id="slots-area"></div>
+        <button class="btn btn-main" style="background:#3b82f6; box-shadow: 0 4px 0 #1d4ed8;" onclick="salvarQueda()">CONCLUIR QUEDA</button>
+        <button onclick="finalizarCamp()" style="background:none; border:none; color:#64748b; width:100%; margin-top:15px; font-size:0.7rem; cursor:pointer">FINALIZAR E ARQUIVAR CAMPEONATO</button>
+    </div>
 
-        // --- CONEXÃO COM O RENDER ---
-        async function processarPrintOCR() {
-            const inputPrint = document.getElementById('printLobby');
-            const statusText = document.getElementById('statusOCR');
-            const campoTexto = document.getElementById('listaTimes');
+    <div class="card" id="view-table" style="display:none">
+        <h3>📊 CLASSIFICAÇÃO ATUAL</h3>
+        <div class="table-container" id="capture-area">
+            <table>
+                <thead><tr><th>#</th><th>TIME</th><th>KILLS</th><th>TOTAL</th></tr></thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+        <div class="export-grid">
+            <button class="btn btn-zap" onclick="exportZap()">WHATSAPP</button>
+            <button class="btn btn-print" onclick="exportImg()">INSTAGRAM</button>
+        </div>
+    </div>
+</div>
 
-            if (!inputPrint.files || inputPrint.files.length === 0) {
-                alert("Selecione uma imagem!"); return;
-            }
+<script>
+    let times = []; let queda = 1;
+    const pontos = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
 
-            const formData = new FormData();
-            formData.append("imagem", inputPrint.files[0]);
-            statusText.style.display = 'block';
+    // Carregar histórico ao iniciar
+    window.onload = () => { renderHistory(); };
 
-            try {
-                const resposta = await fetch("https://astra-api-ocr.onrender.com/ler-print", {
-                    method: "POST",
-                    body: formData
-                });
-                const dados = await resposta.json();
-                if(dados.times) {
-                    campoTexto.value = dados.times;
-                    alert("✅ Nomes extraídos!");
-                } else {
-                    alert("Astra: Não encontrei nomes claros.");
-                }
-            } catch (e) {
-                alert("🔴 O servidor está iniciando ou deu erro. Aguarde 2 min.");
-            } finally {
-                statusText.style.display = 'none';
-            }
+    function iniciarCamp() {
+        const raw = document.getElementById('lista-input').value;
+        if(!raw.trim()) return;
+        times = raw.split('\n').filter(l => l.trim()).map((l, i) => ({
+            id: i, nome: l.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
+            kills: 0, pts: 0, booyahs: 0
+        }));
+        document.getElementById('view-setup').style.display = 'none';
+        document.getElementById('view-scores').style.display = 'block';
+        document.getElementById('view-table').style.display = 'block';
+        renderSlots();
+    }
+
+    function renderSlots() {
+        document.getElementById('label-queda').innerText = `LANÇANDO QUEDA ${queda}`;
+        document.getElementById('slots-area').innerHTML = times.map(t => `
+            <div class="slot-item">
+                <span class="slot-name">${t.nome}</span>
+                <div class="inputs-row">
+                    <input type="number" id="p_${t.id}" class="input-ff" placeholder="POSIÇÃO">
+                    <input type="number" id="k_${t.id}" class="input-ff" placeholder="KILLS">
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function salvarQueda() {
+        times.forEach(t => {
+            const pos = parseInt(document.getElementById(`p_${t.id}`).value) || 12;
+            const kil = parseInt(document.getElementById(`k_${t.id}`).value) || 0;
+            t.pts += (pontos[pos] || 0) + kil;
+            t.kills += kil;
+            if(pos === 1) t.booyahs++;
+        });
+        queda++;
+        renderSlots(); renderTable();
+        window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+    }
+
+    function renderTable() {
+        const sorted = [...times].sort((a,b) => b.pts - a.pts || b.kills - a.kills);
+        document.getElementById('table-body').innerHTML = sorted.map((t, i) => `
+            <tr>
+                <td class="rank-${i+1}">${i+1}º</td>
+                <td style="text-align:left; font-size:0.8rem">${t.nome} ${'🏆'.repeat(t.booyahs)}</td>
+                <td>${t.kills}</td>
+                <td style="color:var(--accent)">${t.pts}</td>
+            </tr>
+        `).join('');
+    }
+
+    function exportZap() {
+        let txt = `🏆 *ASTRA FF - RESULTADOS* 🏆\n\n`;
+        [...times].sort((a,b) => b.pts - a.pts).forEach((t, i) => {
+            txt += `${i+1}º *${t.nome}* - ${t.pts} pts\n`;
+        });
+        navigator.clipboard.writeText(txt); alert("Copiado!");
+    }
+
+    function exportImg() {
+        html2canvas(document.getElementById('capture-area'), {backgroundColor:'#0f172a'}).then(canvas => {
+            const l = document.createElement('a'); l.download = 'tabela-astra.png';
+            l.href = canvas.toDataURL(); l.click();
+        });
+    }
+
+    function finalizarCamp() {
+        if(!confirm("Deseja arquivar este campeonato?")) return;
+        const sorted = [...times].sort((a,b) => b.pts - a.pts);
+        const win = sorted[0];
+        const campData = { data: new Date().toLocaleDateString(), campeao: win.nome, pts: win.pts };
+        
+        let hist = JSON.parse(localStorage.getItem('astra_history') || '[]');
+        hist.unshift(campData);
+        localStorage.setItem('astra_history', JSON.stringify(hist.slice(0, 5)));
+        location.reload();
+    }
+
+    function renderHistory() {
+        const hist = JSON.parse(localStorage.getItem('astra_history') || '[]');
+        if(hist.length > 0) {
+            document.getElementById('historico-box').style.display = 'block';
+            document.getElementById('history-list').innerHTML = hist.map(h => `
+                <div class="history-item">
+                    <span>${h.data} - <strong>${h.campeao}</strong></span>
+                    <span style="color:var(--accent)">${h.pts} PTS</span>
+                </div>
+            `).join('');
         }
-
-        function iniciarCampeonato() {
-            const texto = document.getElementById('listaTimes').value;
-            if(texto.trim() === "") { alert("Lista vazia!"); return; }
-            const linhas = texto.split('\n');
-            times = []; 
-            let idContador = 1;
-            linhas.forEach(linha => {
-                if(linha.trim() !== "") {
-                    let nomeTime = linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim();
-                    times.push({ id: idContador, nome: nomeTime, totalPts: 0, totalKills: 0, booyahs: 0, penalidade: 0, pago: false, pix: "", statusFinal: "" });
-                    idContador++;
-                }
-            });
-            document.getElementById('sessaoOCR').style.display = 'none';
-            document.getElementById('sessaoCadastro').style.display = 'none';
-            document.getElementById('sessaoResultados').style.display = 'block';
-            document.getElementById('btnReset').style.display = 'block';
-            atualizarTelaDeSlots();
-            renderizarTabela();
-        }
-
-        function atualizarTelaDeSlots() {
-            document.getElementById('textoQuedaAtual').innerText = `QUEDA ${quedaAtual}`;
-            const areaSlots = document.getElementById('areaSlots');
-            let html = '<div class="grid-slots">';
-            times.forEach(t => {
-                html += `
-                    <div class="slot-item">
-                        <div class="slot-header">
-                            <span class="slot-nome">${t.nome}</span>
-                            <button class="btn-financeiro ${t.pago?'pago':'pendente'}" onclick="toggPag(${t.id})">${t.pago?'✅ PAGO':'❌ DEVE'}</button>
-                        </div>
-                        <div class="slot-controles">
-                            <select id="status_${t.id}" class="select-status">
-                                <option value="NORMAL">Normal</option><option value="WO">W.O.</option><option value="DQ">DQ</option>
-                            </select>
-                            <input type="number" id="pos_${t.id}" class="input-pequeno" placeholder="Pos">
-                            <input type="number" id="kills_${t.id}" class="input-pequeno" placeholder="Kills">
-                        </div>
-                    </div>`;
-            });
-            areaSlots.innerHTML = html + '</div>';
-        }
-
-        function toggPag(id) {
-            let t = times.find(x => x.id === id);
-            t.pago = !t.pago;
-            atualizarTelaDeSlots();
-        }
-
-        function salvarQueda() {
-            times.forEach(t => {
-                let status = document.getElementById(`status_${t.id}`).value;
-                if(status === "NORMAL") {
-                    let pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
-                    let k = parseInt(document.getElementById(`kills_${t.id}`).value) || 0;
-                    t.totalPts += (pontosLBFF[pos] || 0) + k;
-                    t.totalKills += k;
-                    if(pos === 1) t.booyahs++;
-                } else { t.statusFinal = status; }
-            });
-            quedaAtual++;
-            atualizarTelaDeSlots();
-            renderizarTabela();
-            document.getElementById('areaExportacao').style.display = 'flex';
-        }
-
-        function renderizarTabela() {
-            timesOrdenadosGlobais = [...times].sort((a,b) => b.totalPts - a.totalPts || b.booyahs - a.booyahs);
-            let html = `<table><thead><tr><th>#</th><th>Time</th><th>K</th><th>Pts</th></tr></thead><tbody>`;
-            timesOrdenadosGlobais.forEach((t, i) => {
-                html += `<tr><td class="posicao">${i+1}º</td><td>${t.nome}</td><td>${t.totalKills}</td><td class="pontos-total">${t.totalPts}</td></tr>`;
-            });
-            document.getElementById('areaTabela').innerHTML = html + `</tbody></table>`;
-        }
-
-        function copiarWhatsApp() {
-            let txt = `🏆 *CLASSIFICAÇÃO* 🏆\n\n`;
-            timesOrdenadosGlobais.forEach((t, i) => {
-                txt += `${i+1}º *${t.nome}* | Pts: ${t.totalPts}\n`;
-            });
-            navigator.clipboard.writeText(txt);
-            alert("Copiado!");
-        }
-
-        function baixarImagem() {
-            html2canvas(document.getElementById('cartaoTabelaFinal')).then(c => {
-                let l = document.createElement('a');
-                l.download = 'tabela.png';
-                l.href = c.toDataURL();
-                l.click();
-            });
-        }
-
-        function resetarTudo() { if(confirm("Resetar?")) location.reload(); }
-    </script>
+    }
+</script>
 </body>
 </html>
