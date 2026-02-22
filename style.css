@@ -1,8 +1,9 @@
-/* DESIGN SYSTEM ASTRA ELITE */
+/* DESIGN SYSTEM ASTRA ELITE v5.0 */
 :root {
     --bg: #020617;
     --card: #0f172a;
     --accent: #fbbf24; /* Gold Neon */
+    --cyan: #00e5ff;   /* Cor para campos de PIX */
     --success: #22c55e;
     --danger: #ef4444;
     --text: #f8fafc;
@@ -24,6 +25,7 @@ body { background: var(--bg); color: var(--text); overflow-x: hidden; }
 .logo-central { font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px; }
 .logo-central span { color: var(--accent); }
 .menu-btn { font-size: 1.5rem; cursor: pointer; color: var(--accent); }
+#digital-clock { font-family: 'Orbitron'; font-size: 0.8rem; color: var(--text-dim); }
 
 /* SIDEBAR */
 .sidebar {
@@ -44,41 +46,36 @@ body { background: var(--bg); color: var(--text); overflow-x: hidden; }
 .btn-reset { color: var(--danger); margin-top: 20px; border: 1px solid rgba(239, 68, 68, 0.2); }
 .divider { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
 
-/* CONTAINERS */
+/* CONTAINER & CARDS */
 .container { padding: 15px; max-width: 500px; margin: 0 auto; padding-bottom: 120px; }
 .view { display: none; animation: fadeIn 0.4s ease; }
 .view.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.card-main { background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; }
+.card-main { background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
 .title-view { font-family: 'Orbitron'; font-size: 0.8rem; color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+.subtitle { font-size: 0.7rem; color: var(--text-dim); margin-bottom: 15px; }
 
-/* BOTOES ADMIN TOOLS */
+/* GESTÃO DE PIX E NICKS */
+.pix-input-group { display: flex; gap: 8px; margin-top: 12px; }
+.input-pix { border-left: 3px solid var(--cyan) !important; flex: 2; }
+.input-nick { flex: 3; }
+
+/* ADMIN TOOLS */
 .admin-tools-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; }
 .btn-tool {
     background: #1e293b; border: 1px solid var(--border); color: var(--text-dim);
     padding: 12px 5px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;
     cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px;
 }
-.btn-tool i { font-size: 1rem; }
 .btn-tool:hover { border-color: var(--accent); color: var(--accent); }
 .btn-tool.danger:hover { border-color: var(--danger); color: var(--danger); }
-
-/* MODO E FORM */
-.mode-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.m-btn { background: #1e293b; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
-.m-btn.active { border-color: var(--accent); background: rgba(251, 191, 36, 0.1); color: var(--accent); }
-
-textarea, input, select {
-    width: 100%; background: #070a13; border: 1px solid var(--border);
-    color: white; padding: 14px; border-radius: 12px; margin-top: 8px; outline: none; font-size: 0.85rem;
-}
-textarea { height: 150px; border-left: 3px solid var(--accent); }
 
 /* MOTOR DE QUEDA */
 .slot-queda { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
 .slot-head { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 800; font-size: 0.8rem; }
 .slot-content { display: none; padding: 15px; grid-template-columns: 1fr 1fr; gap: 10px; background: #070a13; border-top: 1px solid var(--border); }
+.slot-content label { font-size: 0.6rem; color: var(--text-dim); font-weight: 700; text-transform: uppercase; }
 
 /* RANKING VISUAL */
 .ranking-visual { background: var(--bg); padding: 25px; border-radius: 15px; border: 2px solid var(--accent); margin-top: 30px; }
@@ -87,20 +84,31 @@ textarea { height: 150px; border-left: 3px solid var(--accent); }
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 th { text-align: left; font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; padding: 10px; border-bottom: 1px solid var(--border); }
 td { padding: 12px 10px; border-bottom: 1px solid #1e293b; font-size: 0.75rem; }
-.win-streak { color: #ff4500; font-weight: 900; margin-left: 5px; }
+.win-streak { color: #ff4500; font-weight: 900; margin-left: 5px; animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-/* MODAL HISTORICO */
-.modal {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 3000; width: 90%; max-width: 400px;
+/* FORM ELEMENTS */
+.mode-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.m-btn { background: #1e293b; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
+.m-btn.active { border-color: var(--accent); background: rgba(251, 191, 36, 0.1); color: var(--accent); }
+
+textarea, input, select {
+    width: 100%; background: #070a13; border: 1px solid var(--border);
+    color: white; padding: 12px; border-radius: 10px; margin-top: 5px; outline: none; font-size: 0.8rem;
 }
-.scroll-area { max-height: 300px; overflow-y: auto; margin-bottom: 15px; }
+textarea { height: 140px; border-left: 3px solid var(--accent); resize: none; }
+
+/* MODAL & OVERLAY */
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; width: 90%; max-width: 400px; }
+.scroll-area { max-height: 380px; overflow-y: auto; padding-right: 5px; }
 .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; z-index: 1500; backdrop-filter: blur(4px); }
 
 /* BUTTONS */
-.btn-next, .btn-finalize { width: 100%; padding: 16px; background: var(--accent); border: none; border-radius: 12px; font-weight: 900; cursor: pointer; margin-top: 15px; font-size: 0.85rem; }
+.btn-next, .btn-finalize { width: 100%; padding: 16px; background: var(--accent); border: none; border-radius: 12px; font-weight: 900; cursor: pointer; margin-top: 15px; font-size: 0.85rem; text-transform: uppercase; }
 .btn-finalize { background: var(--success); color: white; }
 .sharing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
 .btn-share { padding: 14px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.wa { background: #22c55e; } .camera { background: #3b82f6; }
+.wa { background: #22c55e; } 
+.camera { background: #3b82f6; }
+
 .hidden { display: none; }
