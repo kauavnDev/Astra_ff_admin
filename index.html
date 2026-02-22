@@ -24,7 +24,12 @@
         .btn-verde { background-color: #22c55e; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; }
         .btn-azul { background-color: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
         .btn-vermelho { background-color: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9rem; margin-left: 10px;}
+        .btn-roxo { background-color: #8b5cf6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; transition: 0.2s;}
+        .btn-roxo:hover { background-color: #7c3aed; }
         
+        /* Upload Input */
+        .input-file { width: 100%; background-color: #0f172a; color: white; border: 1px dashed #475569; padding: 15px; border-radius: 5px; margin-bottom: 15px; font-size: 1rem; text-align: center; }
+
         .area-exportacao { display: flex; gap: 10px; margin-top: 15px; display: none; flex-wrap: wrap; }
         .btn-wpp { background-color: #25D366; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 200px; }
         .btn-img { background-color: #a855f7; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 200px; }
@@ -67,9 +72,18 @@
     </nav>
 
     <div class="container">
+        
+        <div class="card" id="sessaoOCR">
+            <h3>📸 1. Leitura Inteligente (OCR)</h3>
+            <p style="margin-bottom: 5px;">Envie o print da tela para a Astra gerar os slots automaticamente.</p>
+            <input type="file" id="printLobby" accept="image/*" class="input-file">
+            <button class="btn-roxo" onclick="processarPrintOCR()">🤖 Astra, analise este print</button>
+            <p id="statusOCR" style="color: #fbbf24; text-align: center; font-weight: bold; display: none; margin-top: 10px;">Enviando imagem para o Cérebro Astra... ⏳</p>
+        </div>
+
         <div class="card" id="sessaoCadastro">
-            <h3>📝 Cadastrar Times</h3>
-            <textarea id="listaTimes" rows="5" placeholder="1 - LOUD&#10;2 - FLUXO"></textarea>
+            <h3>📝 2. Ou Cadastre Manualmente</h3>
+            <textarea id="listaTimes" rows="4" placeholder="1 - LOUD&#10;2 - FLUXO"></textarea>
             <button class="btn-verde" onclick="iniciarCampeonato()">Iniciar Campeonato</button>
         </div>
 
@@ -101,6 +115,44 @@
         let timesOrdenadosGlobais = []; 
         const pontosLBFF = { 1: 12, 2: 9, 3: 8, 4: 7, 5: 6, 6: 5, 7: 4, 8: 3, 9: 2, 10: 1, 11: 0, 12: 0 };
 
+        // --- NOVA CONEXÃO COM O CÉREBRO NO RENDER ---
+        async function processarPrintOCR() {
+            const inputPrint = document.getElementById('printLobby');
+            const statusText = document.getElementById('statusOCR');
+
+            if (!inputPrint.files || inputPrint.files.length === 0) {
+                alert("Astra avisa: Você precisa selecionar uma imagem da galeria primeiro!");
+                return;
+            }
+
+            const imagem = inputPrint.files[0];
+            const formData = new FormData();
+            formData.append("imagem", imagem); // Empacota a imagem para viagem
+
+            // Mostra o texto de carregamento
+            statusText.style.display = 'block';
+
+            try {
+                // Dispara a imagem lá para o seu servidor no Render
+                const resposta = await fetch("https://astra-api-ocr.onrender.com/ler-print", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const dados = await resposta.json();
+                
+                // Se o Render responder, significa que a conexão foi um sucesso absoluto!
+                alert("🟢 SINAL DO CÉREBRO: " + dados.mensagem);
+                
+            } catch (erro) {
+                alert("🔴 Falha na conexão com o Cérebro: " + erro);
+            } finally {
+                // Esconde o texto de carregamento
+                statusText.style.display = 'none';
+            }
+        }
+        // ---------------------------------------------
+
         function iniciarCampeonato() {
             const texto = document.getElementById('listaTimes').value;
             if(texto.trim() === "") { alert("Astra: Cole a lista de times!"); return; }
@@ -113,12 +165,12 @@
             linhas.forEach(linha => {
                 if(linha.trim() !== "") {
                     let nomeTime = linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim();
-                    // Nova memória: Guardando a chave PIX e se tomou DQ/WO
                     times.push({ id: idContador, nome: nomeTime, totalPts: 0, totalKills: 0, booyahs: 0, penalidade: 0, pago: false, pix: "", statusFinal: "" });
                     idContador++;
                 }
             });
 
+            document.getElementById('sessaoOCR').style.display = 'none';
             document.getElementById('sessaoCadastro').style.display = 'none';
             document.getElementById('sessaoResultados').style.display = 'block';
             document.getElementById('btnReset').style.display = 'block';
@@ -179,11 +231,10 @@
                 let status = document.getElementById(`status_${time.id}`).value;
                 let punicao = parseInt(document.getElementById(`punicao_${time.id}`).value) || 0;
                 
-                // Se tomou W.O. ou DQ, não ganha pontos de posição nem kills.
                 if(status === "WO" || status === "DQ") {
                     time.penalidade += punicao;
                     time.totalPts -= punicao;
-                    time.statusFinal = status; // Marca para aparecer na tabela
+                    time.statusFinal = status; 
                 } else {
                     let pos = parseInt(document.getElementById(`pos_${time.id}`).value) || 12; 
                     let kills = parseInt(document.getElementById(`kills_${time.id}`).value) || 0;
@@ -193,7 +244,7 @@
                     time.totalKills += kills;
                     time.penalidade += punicao;
                     if(pos === 1) { time.booyahs += 1; }
-                    time.statusFinal = ""; // Limpa status se jogou normal
+                    time.statusFinal = ""; 
                 }
             });
 
@@ -266,6 +317,7 @@
 
         function resetarTudo() {
             if(confirm("Zerar diária?")) {
+                document.getElementById('sessaoOCR').style.display = 'block';
                 document.getElementById('sessaoCadastro').style.display = 'block';
                 document.getElementById('sessaoResultados').style.display = 'none';
                 document.getElementById('areaExportacao').style.display = 'none';
