@@ -8,59 +8,39 @@
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
         body { background-color: #0f172a; color: #f8fafc; padding-bottom: 50px; }
-        
         .navbar { background-color: #1e293b; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; }
         .navbar h1 { color: #fbbf24; font-size: 1.5rem; }
         .btn-sair { background-color: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        
         .container { padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; }
-        
         .card { background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
         .card h3 { color: #fbbf24; margin-bottom: 10px; font-size: 1.2rem; }
-        
         textarea { width: 100%; background-color: #334155; color: white; border: 1px solid #475569; padding: 12px; border-radius: 5px; margin-bottom: 15px; font-size: 1rem; }
-        textarea:focus { outline: none; border-color: #fbbf24; }
-        
         .btn-verde { background-color: #22c55e; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; }
         .btn-azul { background-color: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
         .btn-vermelho { background-color: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9rem; margin-left: 10px;}
-        .btn-roxo { background-color: #8b5cf6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; transition: 0.2s;}
-        .btn-roxo:hover { background-color: #7c3aed; }
-        
-        /* Upload Input */
+        .btn-roxo { background-color: #8b5cf6; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; margin-bottom: 10px; }
         .input-file { width: 100%; background-color: #0f172a; color: white; border: 1px dashed #475569; padding: 15px; border-radius: 5px; margin-bottom: 15px; font-size: 1rem; text-align: center; }
-
         .area-exportacao { display: flex; gap: 10px; margin-top: 15px; display: none; flex-wrap: wrap; }
         .btn-wpp { background-color: #25D366; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 200px; }
         .btn-img { background-color: #a855f7; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 200px; }
-
         .grid-slots { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .slot-item { background-color: #334155; padding: 12px; border-radius: 5px; border-left: 5px solid #fbbf24; display: flex; flex-direction: column; gap: 10px; }
         .slot-header { display: flex; justify-content: space-between; align-items: center; }
         .slot-nome { color: white; font-weight: bold; font-size: 1.1rem; }
-        
         .input-pix { background-color: #0f172a; color: #94a3b8; border: 1px solid #475569; padding: 6px; border-radius: 4px; font-size: 0.8rem; width: 100%; }
-        .input-pix:focus { outline: none; border-color: #fbbf24; color: white; }
-
         .slot-controles { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;}
         .input-pequeno { width: 60px; background-color: #0f172a; color: white; border: 1px solid #475569; padding: 8px; border-radius: 4px; text-align: center; font-weight: bold; }
         .input-punicao { width: 65px; background-color: #450a0a; color: #fca5a5; border: 1px solid #ef4444; padding: 8px; border-radius: 4px; text-align: center; font-weight: bold; }
-        .select-status { background-color: #0f172a; color: white; border: 1px solid #475569; padding: 8px; border-radius: 4px; font-weight: bold; outline: none; }
-        
+        .select-status { background-color: #0f172a; color: white; border: 1px solid #475569; padding: 8px; border-radius: 4px; font-weight: bold; }
         .btn-financeiro { padding: 8px; border-radius: 4px; border: none; font-weight: bold; cursor: pointer; width: 85px; font-size: 0.8rem; }
         .pago { background-color: #064e3b; color: #34d399; border: 1px solid #059669; }
         .pendente { background-color: #450a0a; color: #fca5a5; border: 1px solid #ef4444; }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #1e293b; border-radius: 5px; overflow: hidden; }
         th { background-color: #334155; padding: 12px; text-align: center; color: #cbd5e1; font-size: 0.8rem; text-transform: uppercase; }
-        th:nth-child(2) { text-align: left; } 
         td { padding: 12px; border-bottom: 1px solid #334155; text-align: center; }
-        td:nth-child(2) { text-align: left; font-weight: bold; } 
         .posicao { color: #fbbf24; font-weight: bold; font-size: 1.1rem; }
         .pontos-total { color: #4ade80; font-weight: bold; font-size: 1.2rem; }
-        .booyah-text { color: #fbbf24; font-size: 0.8rem; margin-left: 5px;}
         .tag-status { font-size: 0.7rem; padding: 2px 5px; border-radius: 3px; background-color: #ef4444; color: white; margin-left: 5px; }
-
         .info-queda { background-color: #1e293b; border: 1px solid #fbbf24; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; color: #fbbf24; margin-bottom: 15px; }
     </style>
 </head>
@@ -75,37 +55,37 @@
         
         <div class="card" id="sessaoOCR">
             <h3>📸 1. Leitura Inteligente (OCR)</h3>
-            <p style="margin-bottom: 5px;">Envie o print da tela para a Astra gerar os slots automaticamente.</p>
+            <p style="margin-bottom: 5px; font-size: 0.9rem;">Suba o print do lobby para gerar os nomes.</p>
             <input type="file" id="printLobby" accept="image/*" class="input-file">
             <button class="btn-roxo" onclick="processarPrintOCR()">🤖 Astra, analise este print</button>
-            <p id="statusOCR" style="color: #fbbf24; text-align: center; font-weight: bold; display: none; margin-top: 10px;">Enviando imagem para o Cérebro Astra... ⏳</p>
+            <p id="statusOCR" style="color: #fbbf24; text-align: center; font-weight: bold; display: none; margin-top: 10px;">IA Lendo print... ⏳</p>
         </div>
 
         <div class="card" id="sessaoCadastro">
-            <h3>📝 2. Ou Cadastre Manualmente</h3>
-            <textarea id="listaTimes" rows="4" placeholder="1 - LOUD&#10;2 - FLUXO"></textarea>
+            <h3>📝 2. Lista de Times</h3>
+            <textarea id="listaTimes" rows="6" placeholder="Os nomes aparecerão aqui após o OCR ou digite manualmente..."></textarea>
             <button class="btn-verde" onclick="iniciarCampeonato()">Iniciar Campeonato</button>
         </div>
 
         <div class="card" id="sessaoResultados" style="display: none;">
-            <div class="info-queda" id="textoQuedaAtual">Lançando resultados da: QUEDA 1</div>
+            <div class="info-queda" id="textoQuedaAtual">QUEDA 1</div>
             <div id="areaSlots"></div>
             <button class="btn-azul" onclick="salvarQueda()">Salvar Queda e Atualizar Tabela</button>
         </div>
 
         <div class="card" id="cartaoTabelaFinal">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>📊 Tabela Geral Acumulada</h3>
-                <button class="btn-vermelho" onclick="resetarTudo()" id="btnReset" style="display: none;">Resetar Tudo</button>
+                <h3>📊 Tabela Geral</h3>
+                <button class="btn-vermelho" onclick="resetarTudo()" id="btnReset" style="display: none;">Resetar</button>
             </div>
-            <div id="areaTabela" style="overflow-x: auto; padding-bottom: 10px;">
-                <p style="color: #64748b; font-style: italic; margin-top: 15px;">A tabela aparecerá aqui...</p>
+            <div id="areaTabela" style="overflow-x: auto;">
+                <p style="color: #64748b; font-style: italic; margin-top: 15px;">Aguardando início...</p>
             </div>
         </div>
 
         <div class="area-exportacao" id="areaExportacao">
-            <button class="btn-wpp" onclick="copiarWhatsApp()">🟢 Copiar Tabela (WhatsApp)</button>
-            <button class="btn-img" onclick="baixarImagem()">📸 Baixar Imagem (Instagram)</button>
+            <button class="btn-wpp" onclick="copiarWhatsApp()">🟢 WhatsApp</button>
+            <button class="btn-img" onclick="baixarImagem()">📸 Instagram</button>
         </div>
     </div>
 
@@ -115,53 +95,45 @@
         let timesOrdenadosGlobais = []; 
         const pontosLBFF = { 1: 12, 2: 9, 3: 8, 4: 7, 5: 6, 6: 5, 7: 4, 8: 3, 9: 2, 10: 1, 11: 0, 12: 0 };
 
-        // --- NOVA CONEXÃO COM O CÉREBRO NO RENDER ---
+        // --- CONEXÃO COM O RENDER ---
         async function processarPrintOCR() {
             const inputPrint = document.getElementById('printLobby');
             const statusText = document.getElementById('statusOCR');
+            const campoTexto = document.getElementById('listaTimes');
 
             if (!inputPrint.files || inputPrint.files.length === 0) {
-                alert("Astra avisa: Você precisa selecionar uma imagem da galeria primeiro!");
-                return;
+                alert("Selecione uma imagem!"); return;
             }
 
-            const imagem = inputPrint.files[0];
             const formData = new FormData();
-            formData.append("imagem", imagem); // Empacota a imagem para viagem
-
-            // Mostra o texto de carregamento
+            formData.append("imagem", inputPrint.files[0]);
             statusText.style.display = 'block';
 
             try {
-                // Dispara a imagem lá para o seu servidor no Render
                 const resposta = await fetch("https://astra-api-ocr.onrender.com/ler-print", {
                     method: "POST",
                     body: formData
                 });
-
                 const dados = await resposta.json();
-                
-                // Se o Render responder, significa que a conexão foi um sucesso absoluto!
-                alert("🟢 SINAL DO CÉREBRO: " + dados.mensagem);
-                
-            } catch (erro) {
-                alert("🔴 Falha na conexão com o Cérebro: " + erro);
+                if(dados.times) {
+                    campoTexto.value = dados.times;
+                    alert("✅ Nomes extraídos!");
+                } else {
+                    alert("Astra: Não encontrei nomes claros.");
+                }
+            } catch (e) {
+                alert("🔴 O servidor está iniciando ou deu erro. Aguarde 2 min.");
             } finally {
-                // Esconde o texto de carregamento
                 statusText.style.display = 'none';
             }
         }
-        // ---------------------------------------------
 
         function iniciarCampeonato() {
             const texto = document.getElementById('listaTimes').value;
-            if(texto.trim() === "") { alert("Astra: Cole a lista de times!"); return; }
-
+            if(texto.trim() === "") { alert("Lista vazia!"); return; }
             const linhas = texto.split('\n');
             times = []; 
-            quedaAtual = 1;
             let idContador = 1;
-
             linhas.forEach(linha => {
                 if(linha.trim() !== "") {
                     let nomeTime = linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim();
@@ -169,7 +141,6 @@
                     idContador++;
                 }
             });
-
             document.getElementById('sessaoOCR').style.display = 'none';
             document.getElementById('sessaoCadastro').style.display = 'none';
             document.getElementById('sessaoResultados').style.display = 'block';
@@ -179,75 +150,45 @@
         }
 
         function atualizarTelaDeSlots() {
-            document.getElementById('textoQuedaAtual').innerText = `Lançando resultados da: QUEDA ${quedaAtual}`;
+            document.getElementById('textoQuedaAtual').innerText = `QUEDA ${quedaAtual}`;
             const areaSlots = document.getElementById('areaSlots');
-            let htmlSlots = '<div class="grid-slots">';
-
-            times.forEach(time => {
-                let classePagamento = time.pago ? 'pago' : 'pendente';
-                let textoPagamento = time.pago ? '✅ PAGO' : '❌ DEVE';
-
-                htmlSlots += `
+            let html = '<div class="grid-slots">';
+            times.forEach(t => {
+                html += `
                     <div class="slot-item">
                         <div class="slot-header">
-                            <span class="slot-nome">${time.nome}</span>
-                            <button id="btn_pag_${time.id}" class="btn-financeiro ${classePagamento}" onclick="alternarPagamento(${time.id})">${textoPagamento}</button>
+                            <span class="slot-nome">${t.nome}</span>
+                            <button class="btn-financeiro ${t.pago?'pago':'pendente'}" onclick="toggPag(${t.id})">${t.pago?'✅ PAGO':'❌ DEVE'}</button>
                         </div>
-                        <input type="text" id="pix_${time.id}" class="input-pix" placeholder="Chave PIX (Apenas controle interno)" value="${time.pix}" onchange="salvarPix(${time.id}, this.value)">
-                        
                         <div class="slot-controles">
-                            <select id="status_${time.id}" class="select-status">
-                                <option value="NORMAL">Normal</option>
-                                <option value="WO">W.O.</option>
-                                <option value="DQ">DQ</option>
+                            <select id="status_${t.id}" class="select-status">
+                                <option value="NORMAL">Normal</option><option value="WO">W.O.</option><option value="DQ">DQ</option>
                             </select>
-                            <input type="number" id="pos_${time.id}" class="input-pequeno" placeholder="Pos" min="1" max="12">
-                            <input type="number" id="kills_${time.id}" class="input-pequeno" placeholder="Kills" min="0">
-                            <input type="number" id="punicao_${time.id}" class="input-punicao" placeholder="- Pts" min="0">
+                            <input type="number" id="pos_${t.id}" class="input-pequeno" placeholder="Pos">
+                            <input type="number" id="kills_${t.id}" class="input-pequeno" placeholder="Kills">
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
-            areaSlots.innerHTML = htmlSlots + '</div>';
+            areaSlots.innerHTML = html + '</div>';
         }
 
-        function alternarPagamento(id) {
-            let time = times.find(t => t.id === id);
-            if(time) {
-                time.pago = !time.pago; 
-                let btn = document.getElementById(`btn_pag_${id}`);
-                btn.className = time.pago ? 'btn-financeiro pago' : 'btn-financeiro pendente';
-                btn.innerHTML = time.pago ? '✅ PAGO' : '❌ DEVE';
-            }
-        }
-
-        function salvarPix(id, valor) {
-            let time = times.find(t => t.id === id);
-            if(time) { time.pix = valor; }
+        function toggPag(id) {
+            let t = times.find(x => x.id === id);
+            t.pago = !t.pago;
+            atualizarTelaDeSlots();
         }
 
         function salvarQueda() {
-            times.forEach(time => {
-                let status = document.getElementById(`status_${time.id}`).value;
-                let punicao = parseInt(document.getElementById(`punicao_${time.id}`).value) || 0;
-                
-                if(status === "WO" || status === "DQ") {
-                    time.penalidade += punicao;
-                    time.totalPts -= punicao;
-                    time.statusFinal = status; 
-                } else {
-                    let pos = parseInt(document.getElementById(`pos_${time.id}`).value) || 12; 
-                    let kills = parseInt(document.getElementById(`kills_${time.id}`).value) || 0;
-                    let ptsPos = pontosLBFF[pos] || 0;
-                    
-                    time.totalPts += (ptsPos + kills) - punicao;
-                    time.totalKills += kills;
-                    time.penalidade += punicao;
-                    if(pos === 1) { time.booyahs += 1; }
-                    time.statusFinal = ""; 
-                }
+            times.forEach(t => {
+                let status = document.getElementById(`status_${t.id}`).value;
+                if(status === "NORMAL") {
+                    let pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
+                    let k = parseInt(document.getElementById(`kills_${t.id}`).value) || 0;
+                    t.totalPts += (pontosLBFF[pos] || 0) + k;
+                    t.totalKills += k;
+                    if(pos === 1) t.booyahs++;
+                } else { t.statusFinal = status; }
             });
-
             quedaAtual++;
             atualizarTelaDeSlots();
             renderizarTabela();
@@ -255,77 +196,33 @@
         }
 
         function renderizarTabela() {
-            timesOrdenadosGlobais = [...times].sort((a, b) => {
-                if (b.totalPts !== a.totalPts) return b.totalPts - a.totalPts;
-                if (b.booyahs !== a.booyahs) return b.booyahs - a.booyahs;
-                return b.totalKills - a.totalKills;
+            timesOrdenadosGlobais = [...times].sort((a,b) => b.totalPts - a.totalPts || b.booyahs - a.booyahs);
+            let html = `<table><thead><tr><th>#</th><th>Time</th><th>K</th><th>Pts</th></tr></thead><tbody>`;
+            timesOrdenadosGlobais.forEach((t, i) => {
+                html += `<tr><td class="posicao">${i+1}º</td><td>${t.nome}</td><td>${t.totalKills}</td><td class="pontos-total">${t.totalPts}</td></tr>`;
             });
-
-            const areaTabela = document.getElementById('areaTabela');
-            let htmlTabela = `<table><thead><tr><th>#</th><th>Time</th><th>Kills</th><th>Total</th></tr></thead><tbody>`;
-
-            let ranking = 1;
-            timesOrdenadosGlobais.forEach(time => {
-                let iconeBooyah = time.booyahs > 0 ? `<span class="booyah-text">(${time.booyahs}x 🏆)</span>` : "";
-                let tagStatus = time.statusFinal !== "" ? `<span class="tag-status">${time.statusFinal}</span>` : "";
-                
-                htmlTabela += `
-                    <tr>
-                        <td class="posicao">${ranking}º</td>
-                        <td>${time.nome} ${iconeBooyah} ${tagStatus}</td>
-                        <td>${time.totalKills}</td>
-                        <td class="pontos-total">${time.totalPts}</td>
-                    </tr>
-                `;
-                ranking++;
-            });
-
-            areaTabela.innerHTML = htmlTabela + `</tbody></table>`;
+            document.getElementById('areaTabela').innerHTML = html + `</tbody></table>`;
         }
 
         function copiarWhatsApp() {
-            let textoWpp = `🏆 *CLASSIFICAÇÃO FINAL DA DIÁRIA* 🏆\n\n`;
-            let ranking = 1;
-            timesOrdenadosGlobais.forEach(time => {
-                let medalha = ranking === 1 ? '🥇' : ranking === 2 ? '🥈' : ranking === 3 ? '🥉' : '▪️';
-                let txtBooyah = time.booyahs > 0 ? ` (${time.booyahs}x BOOYAH!)` : '';
-                let tagStatus = time.statusFinal !== "" ? ` [${time.statusFinal}]` : "";
-                
-                textoWpp += `${medalha} *${ranking}º ${time.nome}*${tagStatus} | Pts: *${time.totalPts}* | Kills: ${time.totalKills}${txtBooyah}\n`;
-                ranking++;
+            let txt = `🏆 *CLASSIFICAÇÃO* 🏆\n\n`;
+            timesOrdenadosGlobais.forEach((t, i) => {
+                txt += `${i+1}º *${t.nome}* | Pts: ${t.totalPts}\n`;
             });
-            textoWpp += `\n🤖 _Gerado via Astra FF Admin_`;
-
-            navigator.clipboard.writeText(textoWpp).then(() => {
-                alert("✅ Tabela copiada para o WhatsApp!");
-            }).catch(err => { alert("Erro ao copiar."); });
+            navigator.clipboard.writeText(txt);
+            alert("Copiado!");
         }
 
         function baixarImagem() {
-            alert("Astra: Preparando a imagem... Aguarde.");
-            const cartao = document.getElementById('cartaoTabelaFinal');
-            document.getElementById('btnReset').style.display = 'none';
-
-            html2canvas(cartao, { backgroundColor: '#1e293b' }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = `Tabela_Astra_${quedaAtual - 1}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                document.getElementById('btnReset').style.display = 'block';
+            html2canvas(document.getElementById('cartaoTabelaFinal')).then(c => {
+                let l = document.createElement('a');
+                l.download = 'tabela.png';
+                l.href = c.toDataURL();
+                l.click();
             });
         }
 
-        function resetarTudo() {
-            if(confirm("Zerar diária?")) {
-                document.getElementById('sessaoOCR').style.display = 'block';
-                document.getElementById('sessaoCadastro').style.display = 'block';
-                document.getElementById('sessaoResultados').style.display = 'none';
-                document.getElementById('areaExportacao').style.display = 'none';
-                document.getElementById('btnReset').style.display = 'none';
-                document.getElementById('listaTimes').value = "";
-                document.getElementById('areaTabela').innerHTML = "<p style='color: #64748b; margin-top: 15px;'>Tabela resetada.</p>";
-            }
-        }
+        function resetarTudo() { if(confirm("Resetar?")) location.reload(); }
     </script>
 </body>
 </html>
