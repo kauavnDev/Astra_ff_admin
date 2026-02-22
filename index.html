@@ -3,266 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA FF - CYBER PUNK</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <title>ASTRA - PREMIUM HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #05070a; --card: #0d1117; --accent: #00f2ff; 
-            --neon-pink: #ff00ea; --success: #39ff14; --danger: #ff3131;
-            --gold: #ffcc00; --glass: rgba(13, 17, 23, 0.8);
+            --bg: #0a0c10; --card: #12151c; --accent: #3b82f6; 
+            --border: #1e293b; --text: #f1f5f9; --success: #10b981; --danger: #ef4444;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rajdhani', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
+
+        /* --- ANIMAÇÃO DE BRILHO GIRATÓRIO (BORDER FLOW) --- */
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
         
-        body { 
-            background-color: var(--bg); 
-            color: #e2e8f0; 
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #101520 0%, #05070a 100%);
+        .glow-button {
+            position: relative; padding: 16px; background: var(--card); color: white;
+            border: none; border-radius: 10px; cursor: pointer; font-weight: 700;
+            overflow: hidden; z-index: 1; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .glow-button::before {
+            content: ""; position: absolute; z-index: -2; left: -50%; top: -50%; width: 200%; height: 200%;
+            background-color: #1a1a1a; background-repeat: no-repeat; background-size: 50% 50%, 50% 50%;
+            background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+            background-image: linear-gradient(var(--accent), var(--accent));
+            animation: rotate 3s linear infinite;
+        }
+        .glow-button::after {
+            content: ""; position: absolute; z-index: -1; left: 2px; top: 2px;
+            width: calc(100% - 4px); height: calc(100% - 4px); background: var(--card); border-radius: 8px;
         }
 
-        /* --- ANIMAÇÕES --- */
-        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent); } 100% { box-shadow: 0 0 5px var(--accent); } }
-        @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
-
-        /* --- HEADER NEON --- */
+        /* --- LAYOUT --- */
         .header { 
-            background: var(--glass); padding: 15px; display: flex; 
+            background: rgba(10, 12, 16, 0.9); padding: 18px; display: flex; 
             justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 100;
-            backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
         }
-        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent); text-shadow: 0 0 10px var(--accent); letter-spacing: 2px; }
+        .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: -1px; }
+        .logo span { color: var(--accent); }
 
-        /* --- SIDEBAR CYBER --- */
         .sidebar {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
-            background: #0a0e14; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200;
-            border-right: 1px solid var(--accent); padding: 20px;
+            background: var(--card); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200;
+            border-right: 1px solid var(--border); padding: 30px 20px;
         }
         .sidebar.active { left: 0; }
         .sidebar-item { 
-            padding: 15px; border-radius: 8px; margin-bottom: 10px;
-            cursor: pointer; color: #94a3b8; border: 1px solid transparent; transition: 0.3s;
+            padding: 14px 18px; border-radius: 10px; margin-bottom: 8px;
+            cursor: pointer; color: #94a3b8; font-weight: 500; transition: 0.2s;
         }
-        .sidebar-item:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--accent); color: var(--accent); transform: translateX(10px); }
+        .sidebar-item:hover { background: #1e293b; color: var(--accent); }
 
-        /* --- TUTORIAL OVERLAY --- */
-        #tutorial-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 999; display: flex;
-            align-items: center; justify-content: center; padding: 20px;
+        /* --- TUTORIAL PASSO A PASSO --- */
+        #tutorial {
+            position: fixed; bottom: 30px; right: 30px; z-index: 1000;
+            background: var(--accent); color: white; padding: 20px;
+            border-radius: 15px; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; animation: slideUp 0.5s ease;
         }
-        .step-box {
-            background: var(--card); border: 2px solid var(--neon-pink); padding: 25px;
-            border-radius: 15px; text-align: center; max-width: 400px;
-            box-shadow: 0 0 30px var(--neon-pink);
-        }
-        .arrow-next { color: var(--neon-pink); font-size: 2rem; margin-top: 15px; cursor: pointer; animation: pulse 1.5s infinite; }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .tuto-step { display: none; }
+        .tuto-step.active { display: block; }
 
-        /* --- CARDS & INPUTS --- */
-        .container { padding: 15px; max-width: 550px; margin: 0 auto; }
-        .view { display: none; animation: slideIn 0.4s ease-out; }
+        /* --- COMPONENTES --- */
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        .view { display: none; }
         .view.active { display: block; }
         
         .card { 
-            background: var(--card); border-radius: 12px; padding: 15px; 
-            margin-bottom: 20px; border: 1px solid #1e293b;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            background: var(--card); border-radius: 16px; padding: 20px; 
+            margin-bottom: 20px; border: 1px solid var(--border);
         }
-        .card:hover { border-color: var(--accent); }
-
-        input, textarea, select { 
-            width: 100%; background: #161b22; border: 1px solid #30363d; color: var(--accent); 
-            padding: 12px; border-radius: 8px; margin-top: 10px; font-weight: bold;
+        input, textarea { 
+            width: 100%; background: #0a0c10; border: 1px solid var(--border); color: #fff; 
+            padding: 14px; border-radius: 10px; margin-top: 10px; outline: none; transition: 0.3s;
         }
-        input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
+        input:focus { border-color: var(--accent); }
 
-        .btn-main {
-            width: 100%; padding: 15px; margin-top: 15px; background: none;
-            border: 2px solid var(--accent); color: var(--accent); font-weight: 900;
-            text-transform: uppercase; border-radius: 8px; cursor: pointer;
-            font-family: 'Orbitron'; transition: 0.3s; overflow: hidden; position: relative;
+        .slot-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer;
         }
-        .btn-main:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
-
-        .btn-pay { padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; border: 1px solid currentColor; background: none; }
-        .pay-ok { color: var(--success); box-shadow: inset 0 0 5px var(--success); }
-        .pay-no { color: var(--danger); box-shadow: inset 0 0 5px var(--danger); }
-
-        .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 150; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 150; }
     </style>
 </head>
 <body>
 
-    <div id="tutorial-overlay">
-        <div class="step-box" id="step-content">
-            <h2 id="step-title" style="color:var(--accent); margin-bottom:10px;">BEM-VINDO, ADMIN</h2>
-            <p id="step-text">Vamos configurar sua diária de elite em 3 passos rápidos.</p>
-            <div class="arrow-next" onclick="nextStep()">➜</div>
-        </div>
-    </div>
-
-    <div class="overlay-bg" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <nav class="sidebar" id="sidebar">
-        <h2 style="font-family: 'Orbitron'; color: var(--accent); margin-bottom: 25px; font-size: 1.2rem; text-shadow: 0 0 5px var(--accent);">DASHBOARD</h2>
-        <div class="sidebar-item" onclick="showView('setup')">⚙️ Nova Diária</div>
+        <div class="logo" style="margin-bottom: 40px; font-size: 1.5rem;">ASTRA<span>.</span></div>
+        <div class="sidebar-item" onclick="showView('setup')">⚙️ Configuração</div>
         <div class="sidebar-item" onclick="showView('pix')">💰 Finanças & PIX</div>
+        <div class="sidebar-item" onclick="showView('queda')">🎮 Painel de Quedas</div>
         <div class="sidebar-item" onclick="showView('busca')">🔍 Busca de Nicks</div>
-        <div class="sidebar-item" onclick="showView('queda')">🎮 Motor de Quedas</div>
-        <div class="sidebar-item" style="color: var(--danger); margin-top: 20px; border-top: 1px solid #222;" onclick="location.reload()">⚠️ Resetar Sistema</div>
+        <div class="sidebar-item" style="color:var(--danger); margin-top: 30px;" onclick="location.reload()">Resetar Sistema</div>
     </nav>
 
     <header class="header">
-        <div class="menu-icon" onclick="toggleMenu()">☰</div>
-        <div class="logo">ASTRA <span style="color:var(--neon-pink)">FF</span></div>
-        <div id="status-glow" style="width: 12px; height: 12px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success);"></div>
+        <div onclick="toggleMenu()" style="cursor:pointer; font-size: 1.2rem;">☰</div>
+        <div class="logo">ASTRA <span>HUB</span></div>
+        <div style="width: 20px;"></div>
     </header>
 
     <div class="container">
         <div id="view-setup" class="view active">
-            <div class="card" style="border-top: 3px solid var(--accent);">
-                <h3>CONFIGURAÇÃO INICIAL</h3>
-                <textarea id="input-lista-master" rows="8" placeholder="Ex:&#10;01 - TIME LOUD&#10;02 - TIME PAIN..."></textarea>
-                <button onclick="processarLista()" class="btn-main">Iniciar Protocolo</button>
+            <div class="card">
+                <h2 style="font-size: 1.2rem; margin-bottom: 5px;">Nova Diária</h2>
+                <p style="color: #64748b; font-size: 0.85rem;">Cole sua lista de slots abaixo para começar.</p>
+                <textarea id="input-lista" rows="10" placeholder="01- TIME A&#10;02- TIME B..."></textarea>
+                <button onclick="processarLista()" class="glow-button" style="width:100%; margin-top: 20px;">Importar Slots ➜</button>
             </div>
         </div>
 
         <div id="view-pix" class="view">
             <div class="card">
-                <h3 style="color:var(--neon-pink)">CONTROLE DE SLOTS</h3>
-                <div id="pix-list"></div>
-            </div>
-        </div>
-
-        <div id="view-busca" class="view">
-            <div class="card">
-                <h3>TERMINAL DE BUSCA</h3>
-                <input type="text" id="searchBar" placeholder="Digite nick ou time..." onkeyup="renderizarBusca()">
-                <div id="search-results" style="margin-top: 15px;"></div>
+                <h2 style="font-size: 1.2rem;">Gestão de Slots</h2>
+                <div id="pix-list" style="margin-top: 15px;"></div>
             </div>
         </div>
 
         <div id="view-queda" class="view">
+            <div id="motor-queda"></div>
+        </div>
+
+        <div id="view-busca" class="view">
             <div class="card">
-                <h3 style="color:var(--success)">SISTEMA DE PONTOS</h3>
-                <div id="motor-container"></div>
+                <input type="text" id="searchBar" placeholder="Procurar jogador ou time..." onkeyup="buscar()">
+                <div id="search-results" style="margin-top: 20px;"></div>
             </div>
         </div>
     </div>
 
+    <div id="tutorial">
+        <div class="tuto-step active" id="t1">
+            <p><strong>Passo 1:</strong> Cole a lista e clique em Importar para criar os slots.</p>
+            <button onclick="nextTuto(2)" style="background:white; color:black; border:none; padding:5px 10px; border-radius:5px; margin-top:10px; cursor:pointer;">Próximo ➜</button>
+        </div>
+        <div class="tuto-step" id="t2">
+            <p><strong>Passo 2:</strong> No menu lateral, use 'Finanças' para salvar nicks e PIX.</p>
+            <button onclick="nextTuto(3)" style="background:white; color:black; border:none; padding:5px 10px; border-radius:5px; margin-top:10px; cursor:pointer;">Próximo ➜</button>
+        </div>
+        <div class="tuto-step" id="t3">
+            <p><strong>Passo 3:</strong> Em 'Painel de Quedas', você lança as mortes e o sistema calcula tudo!</p>
+            <button onclick="this.parentElement.parentElement.remove()" style="background:white; color:black; border:none; padding:5px 10px; border-radius:5px; margin-top:10px; cursor:pointer;">Entendido!</button>
+        </div>
+    </div>
+
     <script>
-        let db = { times: [], rodadaAtual: 1 };
-        
-        // --- LOGICA TUTORIAL ---
-        let currentStep = 0;
-        const steps = [
-            { title: "BEM-VINDO AO ASTRA", text: "O painel mais rápido do FF. Clique na seta para aprender." },
-            { title: "1. CADASTRO", text: "Cole sua lista na 'Nova Diária' e clique em Iniciar Protocolo." },
-            { title: "2. GESTÃO", text: "No menu 'Finanças', você marca os pagamentos e salva os nicks." },
-            { title: "3. PONTUAÇÃO", text: "Em 'Motor de Quedas', você lança as posições. O resto eu faço sozinho!" }
-        ];
+        let db = { times: [], rodada: 1 };
 
-        function nextStep() {
-            currentStep++;
-            if(currentStep >= steps.length) {
-                document.getElementById('tutorial-overlay').style.display = 'none';
-                return;
-            }
-            document.getElementById('step-title').innerText = steps[currentStep].title;
-            document.getElementById('step-text').innerText = steps[currentStep].text;
-        }
-
-        // --- LÓGICA CORE ---
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
-            const overlay = document.getElementById('overlay');
-            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+            const ov = document.getElementById('overlay');
+            ov.style.display = ov.style.display === 'block' ? 'none' : 'block';
         }
 
-        function showView(viewName) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById('view-' + viewName).classList.add('active');
-            if(viewName === 'queda') renderizarMotorQuedas();
-            toggleMenu();
+        function showView(v) {
+            document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
+            document.getElementById('view-' + v).classList.add('active');
+            if(v === 'queda') renderMotor();
+            if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
+        }
+
+        function nextTuto(s) {
+            document.querySelectorAll('.tuto-step').forEach(x => x.classList.remove('active'));
+            document.getElementById('t' + s).classList.add('active');
         }
 
         function processarLista() {
-            const val = document.getElementById('input-lista-master').value;
+            const val = document.getElementById('input-lista').value;
             if(!val) return;
             db.times = val.split('\n').filter(l => l.trim()).map((l, i) => ({
                 id: i, nome: l.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
-                jogadores: "", pix: "", pago: false, killsTotal: 0, ptsTotal: 0, booyahs: 0, dq: false
+                nicks: "", pix: "", pago: false, pontos: 0, kills: 0, booyahs: 0
             }));
-            renderizarGestaoFinanceira();
+            renderPix();
             showView('pix');
         }
 
-        function renderizarGestaoFinanceira() {
-            const container = document.getElementById('pix-list');
-            container.innerHTML = db.times.map(t => `
-                <div class="card" style="background:#0a0e14; border-left: 3px solid ${t.pago ? 'var(--success)' : 'var(--danger)'}">
+        function renderPix() {
+            const cont = document.getElementById('pix-list');
+            cont.innerHTML = db.times.map(t => `
+                <div class="card" style="border-left: 4px solid ${t.pago ? 'var(--success)' : 'var(--danger)'}; padding: 15px; margin-bottom: 10px;">
                     <div style="display:flex; justify-content:space-between; align-items:center">
-                        <span style="font-weight:bold; color:var(--accent)">${t.nome}</span>
-                        <button class="btn-pay ${t.pago ? 'pay-ok' : 'pay-no'}" onclick="db.times[${t.id}].pago = !db.times[${t.id}].pago; renderizarGestaoFinanceira();">
-                            ${t.pago ? 'PAGO' : 'PENDENTE'}
-                        </button>
+                        <span style="font-weight:700;">${t.nome}</span>
+                        <button onclick="db.times[${t.id}].pago=!db.times[${t.id}].pago; renderPix();" style="background:none; border:1px solid #334155; color:${t.pago?'var(--success)':'#64748b'}; padding:4px 10px; border-radius:5px; font-size:0.7rem;">${t.pago?'PAGO':'PENDENTE'}</button>
                     </div>
-                    <input type="text" placeholder="PIX" value="${t.pix}" onchange="db.times[${t.id}].pix = this.value">
-                    <input type="text" placeholder="NICKS" value="${t.jogadores}" onchange="db.times[${t.id}].jogadores = this.value">
+                    <input type="text" placeholder="Nicks dos jogadores" value="${t.nicks}" onchange="db.times[${t.id}].nicks=this.value">
                 </div>
             `).join('');
         }
 
-        function renderizarMotorQuedas() {
-            const container = document.getElementById('motor-container');
-            if(db.times.length === 0) return;
-            container.innerHTML = `<div style="text-align:center; color:var(--accent); font-weight:900; margin-bottom:15px">SALA ATUAL: ${db.rodadaAtual}</div>` + 
-            db.times.map(t => `
-                <div class="card" style="background:#0a0e14; margin-bottom:8px">
-                    <div onclick="const s = this.nextElementSibling; s.style.display = s.style.display === 'none' ? 'grid' : 'none'" style="cursor:pointer; display:flex; justify-content:space-between">
-                        <span>▼ ${t.nome}</span>
-                        <span style="color:var(--accent)">${t.ptsTotal} PTS</span>
+        function renderMotor() {
+            const cont = document.getElementById('motor-queda');
+            if(db.times.length === 0) return cont.innerHTML = "Importe a lista primeiro!";
+            cont.innerHTML = `<h2 style="margin-bottom:15px">Queda #${db.rodada}</h2>` + db.times.map(t => `
+                <div class="card" style="margin-bottom:10px">
+                    <div class="slot-row" onclick="const s=this.nextElementSibling; s.style.display=s.style.display==='none'?'grid':'none'">
+                        <span>${t.nome}</span>
+                        <span style="color:var(--accent)">${t.pontos} PTS</span>
                     </div>
-                    <div style="display:none; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px">
+                    <div style="display:none; grid-template-columns: 1fr 1fr; gap:10px; padding:15px;">
                         <input type="number" id="pos_${t.id}" placeholder="Posição">
                         <input type="number" id="kil_${t.id}" placeholder="Kills">
                     </div>
                 </div>
-            `).join('') + `<button onclick="finalizarQueda()" class="btn-main" style="border-color:var(--success); color:var(--success)">Salvar Queda</button>
-            <div id="ranking-final"></div>`;
+            `).join('') + `<button onclick="salvarQueda()" class="glow-button" style="width:100%; margin-top:20px">Finalizar Queda</button>`;
         }
 
-        function finalizarQueda() {
-            const pts = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
+        function salvarQueda() {
+            const tabela = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
             db.times.forEach(t => {
                 const p = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
                 const k = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
-                t.ptsTotal += (pts[p] || 0) + k;
-                t.killsTotal += k;
+                t.pontos += (tabela[p] || 0) + k;
+                t.kills += k;
                 if(p === 1) t.booyahs++;
             });
-            db.rodadaAtual++;
-            renderizarMotorQuedas();
-            renderTabela();
+            db.rodada++;
+            alert("Queda computada!");
+            renderMotor();
         }
 
-        function renderTabela() {
-            const area = document.getElementById('ranking-final');
-            const sorted = [...db.times].sort((a,b) => b.ptsTotal - a.ptsTotal);
-            area.innerHTML = `<h4 style="margin:20px 0 10px; color:var(--accent)">RANKING ATUALIZADO</h4>` +
-            `<table style="width:100%; font-size:0.8rem; border-collapse:collapse">` +
-            sorted.map((t, i) => `<tr style="border-bottom:1px solid #222"><td style="padding:8px">${i+1}º</td><td>${t.nome}</td><td style="color:var(--accent)">${t.ptsTotal}</td></tr>`).join('') + 
-            `</table>`;
-        }
-
-        function renderizarBusca() {
-            const list = document.getElementById('search-results');
-            const termo = document.getElementById('searchBar').value.toUpperCase();
-            const filtrados = db.times.filter(t => t.nome.includes(termo) || t.jogadores.toUpperCase().includes(termo));
-            list.innerHTML = filtrados.map(t => `<div class="card" style="margin-bottom:5px; padding:10px">${t.nome}<br><small style="color:var(--accent)">${t.jogadores}</small></div>`).join('');
+        function buscar() {
+            const t = document.getElementById('searchBar').value.toUpperCase();
+            const res = document.getElementById('search-results');
+            res.innerHTML = db.times.filter(x => x.nome.includes(t) || x.nicks.toUpperCase().includes(t))
+                .map(x => `<div class="card">${x.nome}<br><small style="color:var(--accent)">${x.nicks}</small></div>`).join('');
         }
     </script>
 </body>
