@@ -1,178 +1,150 @@
-/**
- * ASTRA ADMIN ENGINE v4.0
- * Foco: Painel Único, Minimização e Gestão de Pontos
- */
-
-// 1. ESTADO DA APLICAÇÃO
-let astraState = {
-    modo: 'SOLO',
-    queda: 1,
+let app = {
     times: [],
-    pontuacao: { 1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0 }
+    queda: 1,
+    modo: 'SOLO'
 };
 
-// 2. NAVEGAÇÃO ENTRE SEÇÕES
-function showSection(sectionId) {
-    // Esconder todas as seções
-    document.querySelectorAll('.view-section').forEach(section => {
-        section.classList.remove('active');
-    });
-    // Remover active de todos os itens do menu
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.classList.remove('active');
-    });
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    const overlay = document.getElementById('overlay');
+    overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+}
 
-    // Mostrar a seção desejada
-    document.getElementById(`section-${sectionId}`).classList.add('active');
+function showView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + viewId).classList.add('active');
     
-    // Ativar item no menu (procurar pelo texto ou ícone se necessário)
-    // Simplificado: assume ordem fixa para exemplo
-}
-
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.style.width = sidebar.style.width === '80px' ? '260px' : '80px';
-}
-
-// 3. CONFIGURAÇÃO INICIAL
-function setMode(m, btn) {
-    astraState.modo = m;
-    document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('current-mode').innerText = m;
-}
-
-function startApp() {
-    const input = document.getElementById('list-input').value;
-    if (!input.trim()) return alert("Cole a lista primeiro!");
-
-    const linhas = input.split('\n').filter(l => l.trim() !== "");
+    // UI Refresh
+    if(viewId === 'pix') renderPix();
+    if(viewId === 'queda') renderMotor();
     
-    astraState.times = linhas.map((linha, index) => ({
-        id: index,
-        nome: linha.replace(/^[0-9]+[\s-]*\.*[\s-]*\)*\s*/, '').trim().toUpperCase(),
+    // Close Sidebar
+    if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
+}
+
+function cadastrarTimes() {
+    const input = document.getElementById('master-list-input').value;
+    if(!input.trim()) return alert("Erro: Lista vazia.");
+
+    app.times = input.split('\n').filter(l => l.trim()).map((linha, i) => ({
+        id: i,
+        nome: linha.replace(/^[0-9]+[\s-]*\.*[\s-]*/, '').trim().toUpperCase(),
         pago: false,
         nicks: "",
-        pontos: 0,
+        pts: 0,
         kills: 0,
         booyahs: 0,
-        minimizado: false
+        dqCount: 0,
+        status: "NORMAL" // NORMAL, W.O, DQ
     }));
 
-    renderSlots();
-    showSection('panel'); // Vai direto para o painel após gerar
+    alert("Times Cadastrados com Sucesso!");
+    showView('pix');
 }
 
-// 4. GESTÃO DOS SLOTS (PAINEL ÚNICO)
-function renderSlots() {
-    const container = document.getElementById('slots-container');
-    container.innerHTML = "";
-
-    astraState.times.forEach(t => {
-        const div = document.createElement('div');
-        div.className = `slot-card ${t.minimizado ? 'minimized' : ''}`;
-        div.innerHTML = `
-            <div class="slot-header" onclick="toggleMinimize(${t.id})">
-                <span class="slot-title">#${String(t.id + 1).padStart(2, '0')} - ${t.nome}</span>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <span class="status-badge ${t.pago ? 'pago' : 'pendente'}" onclick="event.stopPropagation(); togglePay(${t.id})">
-                        ${t.pago ? 'PAGO' : 'PENDENTE'}
-                    </span>
-                    <i class="ph ph-caret-${t.minimizado ? 'down' : 'up'}"></i>
-                </div>
+function renderPix() {
+    const container = document.getElementById('pix-container');
+    container.innerHTML = app.times.map(t => `
+        <div class="card-glass" style="border-left: 5px solid ${t.pago ? 'var(--success)' : 'var(--danger)'}">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+                <span style="font-weight:800">${t.nome}</span>
+                <button class="btn-status-pay ${t.pago ? 'pago' : 'pendente'}" onclick="togglePago(${t.id})">
+                    ${t.pago ? 'PAGO' : 'PENDENTE'}
+                </button>
             </div>
-            <div class="slot-body">
-                <input type="text" placeholder="Nicks/Observações" value="${t.nicks}" 
-                       onchange="astraState.times[${t.id}].nicks = this.value" style="margin-bottom: 15px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <input type="number" id="pos_${t.id}" placeholder="Posição (1-12)">
-                    <input type="number" id="kill_${t.id}" placeholder="Kills">
-                </div>
-            </div>
-        `;
-        container.appendChild(div);
-    });
+            <input type="text" placeholder="Nicks dos jogadores" value="${t.nicks}" onchange="app.times[${t.id}].nicks = this.value">
+        </div>
+    `).join('');
 }
 
-function toggleMinimize(id) {
-    astraState.times[id].minimizado = !astraState.times[id].minimizado;
-    renderSlots();
+function togglePago(id) {
+    app.times[id].pago = !app.times[id].pago;
+    renderPix();
 }
 
-function togglePay(id) {
-    astraState.times[id].pago = !astraState.times[id].pago;
-    renderSlots();
-}
-
-// 5. PROCESSAMENTO DE DADOS
-function saveRound() {
-    if (!confirm(`Confirmar encerramento da Queda #${astraState.queda}?`)) return;
-
-    astraState.times.forEach(t => {
-        const posVal = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
-        const killVal = parseInt(document.getElementById(`kill_${t.id}`).value) || 0;
-
-        t.pontos += (astraState.pontuacao[posVal] || 0) + killVal;
-        t.kills += killVal;
-        if (posVal === 1) t.booyahs++;
-
-        // Limpar campos de input
-        document.getElementById(`pos_${t.id}`).value = "";
-        document.getElementById(`kill_${t.id}`).value = "";
-        
-        // Minimizar todos automaticamente para a próxima queda ficar limpa
-        t.minimizado = true;
-    });
-
-    astraState.queda++;
-    document.getElementById('header-round').innerText = `QUEDA #${String(astraState.queda).padStart(2, '0')}`;
+function renderMotor() {
+    const container = document.getElementById('motor-slots-area');
+    document.getElementById('hud-round-val').innerText = app.queda;
     
-    updateRankingUI();
-    showSection('ranking');
-    alert("Queda finalizada! Ranking atualizado.");
+    container.innerHTML = app.times.map(t => `
+        <div class="slot-queda-card">
+            <div class="slot-header" onclick="this.nextElementSibling.classList.toggle('minimized')">
+                <span style="font-weight:800; font-size:0.8rem">#${t.id+1} ${t.nome}</span>
+                <span style="color:var(--accent); font-size:0.7rem">${t.pts} PTS</span>
+            </div>
+            <div class="slot-body minimized">
+                <div>
+                    <label style="font-size:0.6rem">STATUS</label>
+                    <select id="st_${t.id}" onchange="atualizarStatusSlot(${t.id}, this.value)">
+                        <option value="NORMAL">NORMAL</option>
+                        <option value="WO">W.O.</option>
+                        <option value="DQ">DQ (ELIMINADO)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size:0.6rem">PUNIÇÃO (-)</label>
+                    <input type="number" id="pun_${t.id}" value="0">
+                </div>
+                <div>
+                    <label style="font-size:0.6rem">POSIÇÃO</label>
+                    <input type="number" id="pos_${t.id}" placeholder="1-12">
+                </div>
+                <div>
+                    <label style="font-size:0.6rem">KILLS</label>
+                    <input type="number" id="kil_${t.id}" placeholder="0">
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
-// 6. RANKING E UTILITÁRIOS
-function updateRankingUI() {
-    const output = document.getElementById('ranking-output');
-    const sorted = [...astraState.times].sort((a, b) => b.pontos - a.pontos || b.booyahs - a.booyahs);
+function processarQueda() {
+    if(!confirm("Encerrar queda " + app.queda + "?")) return;
+    const lbff = {1:12, 2:9, 3:8, 4:7, 5:6, 6:5, 7:4, 8:3, 9:2, 10:1, 11:0, 12:0};
 
-    output.innerHTML = `
-        <table style="width:100%; border-collapse: collapse; margin-top:20px;">
-            <tr style="color: var(--neon-blue); font-size: 0.8rem; text-align: left;">
-                <th style="padding: 10px;">POS</th>
-                <th>TIME</th>
-                <th>KILLS</th>
-                <th>TOTAL</th>
-            </tr>
-            ${sorted.map((t, i) => `
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 15px 10px; font-weight:900;">${i+1}º</td>
-                    <td>${t.nome} ${t.booyahs > 0 ? '🏆'.repeat(t.booyahs) : ''}</td>
-                    <td>${t.kills}</td>
-                    <td style="color: var(--neon-blue); font-weight:900;">${t.pontos} pts</td>
-                </tr>
-            `).join('')}
-        </table>
-    `;
-}
-
-function filterSlots() {
-    const term = document.getElementById('slot-search').value.toUpperCase();
-    astraState.times.forEach(t => {
-        const match = t.nome.includes(term) || t.nicks.toUpperCase().includes(term);
-        // Aqui buscamos o elemento visual para esconder
-        const cards = document.querySelectorAll('.slot-card');
-        cards[t.id].style.display = match ? "block" : "none";
+    app.times.forEach(t => {
+        const st = document.getElementById(`st_${t.id}`).value;
+        const pun = parseInt(document.getElementById(`pun_${t.id}`).value) || 0;
+        
+        if(st === "NORMAL") {
+            const pos = parseInt(document.getElementById(`pos_${t.id}`).value) || 12;
+            const kil = parseInt(document.getElementById(`kil_${t.id}`).value) || 0;
+            t.pts += (lbff[pos] || 0) + kil - pun;
+            t.kills += kil;
+            if(pos === 1) t.booyahs++;
+        } else if(st === "WO") {
+            t.pts -= 0; // W.O geralmente não pontua e não perde nada além da queda
+        } else if(st === "DQ") {
+            t.pts -= pun; // Aplica punição se houver
+        }
     });
+
+    app.queda++;
+    renderMotor();
+    alert("Queda finalizada!");
 }
 
-function copyRanking() {
-    let txt = `📊 *RANKING PARCIAL - QUEDA ${astraState.queda - 1}* 📊\n\n`;
-    const sorted = [...astraState.times].sort((a,b) => b.pontos - a.pontos);
-    sorted.forEach((t, i) => {
-        txt += `${i+1}º ${t.nome} - ${t.pontos} pts\n`;
-    });
-    navigator.clipboard.writeText(txt);
-    alert("Ranking copiado para o WhatsApp!");
+function handleSearch() {
+    const termo = document.getElementById('search-input').value.toUpperCase();
+    const area = document.getElementById('search-results-area');
+    if(!termo) return area.innerHTML = "";
+
+    const filtered = app.times.filter(t => t.nome.includes(termo) || t.nicks.toUpperCase().includes(termo));
+    area.innerHTML = filtered.map(t => `
+        <div class="card-glass">
+            <b style="color:var(--accent)">${t.nome}</b><br>
+            <small>NICKS: ${t.nicks || 'Vazio'}</small><br>
+            <small>STATUS: ${t.pago ? 'PAGO' : 'PENDENTE'}</small>
+        </div>
+    `).join('');
 }
+
+function resetSystem() {
+    if(confirm("Deseja apagar TUDO?")) location.reload();
+}
+
+// Relógio HUD
+setInterval(() => {
+    const d = new Date();
+    document.getElementById('digital-clock').innerText = d.getHours() + ":" + String(d.getMinutes()).padStart(2, '0');
+}, 1000);
