@@ -1,181 +1,71 @@
-/* --- VARIÁVEIS E BASE --- */
 :root { 
-    --bg: #0a0c10; 
-    --card: #12151c; 
-    --accent: #3b82f6; 
-    --border: #1e293b; 
-    --text: #f1f5f9; 
-    --success: #10b981; 
-    --danger: #ef4444;
+    --bg: #030712; --card: rgba(17, 24, 39, 0.7); --accent: #3b82f6; 
+    --neon: #00f2ff; --text: #f9fafb; --danger: #f43f5e; --success: #10b981;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 
-body { 
-    background-color: var(--bg); 
-    color: var(--text); 
-    overflow-x: hidden; 
-    line-height: 1.6;
+/* --- LUZES NEON DE FUNDO --- */
+.neon-blob {
+    position: fixed; width: 300px; height: 300px; background: var(--accent);
+    filter: blur(120px); opacity: 0.15; top: -50px; left: -50px; z-index: -1;
 }
+.neon-blob.secondary { top: unset; left: unset; bottom: -50px; right: -50px; background: #8b5cf6; }
 
-/* --- ANIMAÇÃO BORDER GLOW (O Brilho Giratório) --- */
-@keyframes rotate { 100% { transform: rotate(360deg); } }
-
-.glow-button {
-    position: relative; 
-    padding: 16px; 
-    background: var(--card); 
-    color: white;
-    border: none; 
-    border-radius: 10px; 
-    cursor: pointer; 
-    font-weight: 700;
-    overflow: hidden; 
-    z-index: 1; 
-    transition: 0.3s; 
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* --- MODAL BEM-VINDO --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center;
 }
-
-.glow-button::before {
-    content: ""; 
-    position: absolute; 
-    z-index: -2; 
-    left: -50%; 
-    top: -50%; 
-    width: 200%; 
-    height: 200%;
-    background-repeat: no-repeat; 
-    background-size: 50% 50%, 50% 50%;
-    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-    background-image: linear-gradient(var(--accent), var(--accent));
-    animation: rotate 3s linear infinite;
+.modal-content {
+    background: var(--card); border: 1px solid var(--accent); padding: 40px;
+    border-radius: 24px; text-align: center; max-width: 400px; backdrop-filter: blur(20px);
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
 }
+.neon-text { color: var(--neon); text-shadow: 0 0 10px var(--neon); font-family: 'Orbitron'; margin-bottom: 15px; }
+.step-guide { font-size: 0.8rem; color: #94a3b8; margin: 20px 0; font-weight: bold; }
 
-.glow-button::after {
-    content: ""; 
-    position: absolute; 
-    z-index: -1; 
-    left: 2px; 
-    top: 2px;
-    width: calc(100% - 4px); 
-    height: calc(100% - 4px); 
-    background: var(--card); 
-    border-radius: 8px;
-}
-
-/* --- ESTRUTURA E MENU --- */
+/* --- HEADER & SIDEBAR --- */
 .header { 
-    background: rgba(10, 12, 16, 0.9); 
-    padding: 18px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    border-bottom: 1px solid var(--border); 
-    position: sticky; 
-    top: 0; 
-    z-index: 100; 
-    backdrop-filter: blur(10px);
+    padding: 20px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(10px);
 }
-
-.logo { 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: 1.1rem; 
-    color: var(--accent); 
-    letter-spacing: 1px;
-}
+.logo span { color: var(--accent); text-shadow: 0 0 8px var(--accent); }
 
 .sidebar {
-    position: fixed; 
-    top: 0; 
-    left: -280px; 
-    width: 280px; 
-    height: 100%;
-    background: var(--card); 
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-    z-index: 200;
-    border-right: 1px solid var(--border); 
-    padding: 25px;
+    position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+    background: #0b0f1a; transition: 0.4s; z-index: 1500; padding: 30px 20px;
+    display: flex; flex-direction: column;
 }
-
 .sidebar.active { left: 0; }
+.sidebar-info { margin-top: auto; border-top: 1px solid #1e293b; padding-top: 20px; font-size: 0.75rem; color: #64748b; }
 
-.sidebar-item { 
-    padding: 14px 18px; 
-    border-radius: 10px; 
-    margin-bottom: 8px;
-    cursor: pointer; 
-    color: #94a3b8; 
-    font-weight: 500; 
-    transition: 0.2s;
+/* --- CARDS & BOTÕES --- */
+.glass-card { 
+    background: var(--card); border: 1px solid rgba(255,255,255,0.05);
+    padding: 20px; border-radius: 16px; backdrop-filter: blur(10px); margin-bottom: 15px;
+}
+.glow-button {
+    width: 100%; padding: 15px; border-radius: 12px; border: none;
+    background: var(--accent); color: white; font-weight: 800; cursor: pointer;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); transition: 0.3s;
 }
 
-.sidebar-item:hover { 
-    background: #1e293b; 
-    color: var(--accent); 
+/* AJUSTE DO BOTÃO PENDENTE (AGORA INTEGRADO) */
+.slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.status-pill {
+    padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 900;
+    cursor: pointer; border: 1px solid currentColor;
 }
+.status-pill.pago { color: var(--success); background: rgba(16, 185, 129, 0.1); }
+.status-pill.pendente { color: var(--danger); background: rgba(244, 63, 94, 0.1); }
 
-/* --- COMPONENTES --- */
-.container { 
-    padding: 20px; 
-    max-width: 600px; 
-    margin: 0 auto; 
+textarea, input { 
+    width: 100%; background: rgba(0,0,0,0.3); border: 1px solid #1e293b;
+    color: white; padding: 12px; border-radius: 8px; margin-top: 10px;
 }
-
-.view { display: none; }
+.container { padding: 20px; max-width: 600px; margin: 0 auto; }
+.view { display: none; animation: fadeIn 0.4s; }
 .view.active { display: block; }
-
-.card { 
-    background: var(--card); 
-    border-radius: 16px; 
-    padding: 20px; 
-    margin-bottom: 15px; 
-    border: 1px solid var(--border); 
-    transition: 0.3s;
-}
-
-input, textarea { 
-    width: 100%; 
-    background: #0a0c10; 
-    border: 1px solid var(--border); 
-    color: #fff; 
-    padding: 12px; 
-    border-radius: 8px; 
-    margin-top: 10px; 
-    outline: none;
-    font-size: 0.9rem;
-}
-
-input:focus { border-color: var(--accent); }
-
-/* --- TUTORIAL --- */
-#tutorial {
-    position: fixed; 
-    bottom: 20px; 
-    right: 20px; 
-    z-index: 1000;
-    background: var(--accent); 
-    color: white; 
-    padding: 15px;
-    border-radius: 12px; 
-    width: 260px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.overlay { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0,0,0,0.6); 
-    display: none; 
-    z-index: 150; 
-}
-
-/* --- TABELAS --- */
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th { text-align: left; color: #64748b; font-size: 0.7rem; text-transform: uppercase; padding: 10px; }
-td { padding: 10px; border-bottom: 1px solid #1e293b; font-size: 0.85rem; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
