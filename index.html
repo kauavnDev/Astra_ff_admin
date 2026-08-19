@@ -1,129 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA FF - ELITE HUB v5.0</title>
-    
-    <link rel="stylesheet" href="style.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo Completo da Fauna e Flora de Guaíba - RS</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="header">
-        <div class="header-left">
-            <div class="menu-btn" onclick="toggleMenu()"><i class="ph-bold ph-list"></i></div>
-            <div class="info-pill"><span id="round-hud">Q1</span></div>
-        </div>
-        <div class="logo-central">ASTRA <span>FF</span></div>
-        <div class="header-right">
-            <div id="digital-clock">00:00</div>
-        </div>
-    </header>
-
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2 class="sidebar-logo">PAINEL <span>ASTRA</span></h2>
-            <p class="sidebar-ver">ADMIN ELITE v5.0</p>
-        </div>
-        <div class="sidebar-content">
-            <div class="sidebar-item active" onclick="showView('setup')"><i class="ph-bold ph-gear"></i> Nova Diária</div>
-            <div class="sidebar-item" onclick="showView('pix')"><i class="ph-bold ph-currency-dollar"></i> Gestão & PIX</div>
-            <div class="sidebar-item" onclick="showView('queda')"><i class="ph-bold ph-game-controller"></i> Motor de Queda</div>
-            <hr class="divider">
-            <div class="sidebar-item" onclick="verHistorico()"><i class="ph-bold ph-clock-counter-clockwise"></i> Ver Histórico</div>
-            <div class="sidebar-item btn-reset" onclick="location.reload()"><i class="ph-bold ph-warning"></i> Resetar Tudo</div>
-        </div>
-    </nav>
-
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
+  <!-- Cabeçalho Principal -->
+  <header class="header">
     <div class="container">
-        
-        <section id="view-setup" class="view active">
-            <div class="card-main">
-                <h3 class="title-view"><i class="ph-bold ph-rocket-launch"></i> CONFIGURAÇÃO INICIAL</h3>
-                
-                <div class="mode-selector">
-                    <button class="m-btn active" onclick="setMode('SOLO', 48, this)">SOLO (48)</button>
-                    <button class="m-btn" onclick="setMode('DUO', 24, this)">DUO (24)</button>
-                    <button class="m-btn" onclick="setMode('SQUAD', 12, this)">SQUAD (12)</button>
-                </div>
+      <h1>🌿 Catálogo da Biodiversidade de Guaíba 🐾</h1>
+      <p>Mapeamento interativo das espécies nativas do Lago Guaíba, Banhados, Morros e Bioma Pampa / Mata Atlântica</p>
+    </div>
+  </header>
 
-                <div class="ocr-area">
-                    <label for="ocr-upload" class="ocr-label">
-                        <i class="ph-bold ph-camera"></i> LER PRINT DO LOBBY
-                    </label>
-                    <input type="file" id="ocr-upload" accept="image/*" class="hidden">
-                </div>
+  <main class="container">
+    
+    <!-- Seção de Filtros e Busca -->
+    <section class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar por nome popular, nome científico ou ecossistema de Guaíba..." autocomplete="off">
+      </div>
+      
+      <div class="filter-buttons">
+        <button class="btn filter-btn active" data-category="todos">Todas as Espécies</button>
+        <button class="btn filter-btn" data-category="fauna">🐾 Fauna</button>
+        <button class="btn filter-btn" data-category="flora">🌿 Flora</button>
+        <button class="btn filter-btn" data-category="ameacadas">⚠️ Ameaçadas / Protegidas</button>
+      </div>
+    </section>
 
-                <textarea id="lista-raw" placeholder="Cole a lista manual aqui...&#10;Ex:&#10;01- LOUD&#10;02- PAIN..."></textarea>
-                
-                <button class="btn-next" onclick="processarLista()">CADASTRAR TIMES <i class="ph-bold ph-arrow-right"></i></button>
-            </div>
-        </section>
-
-        <section id="view-pix" class="view">
-            <div class="card-main">
-                <h3 class="title-view"><i class="ph-bold ph-currency-dollar"></i> CONTROLE FINANCEIRO</h3>
-                <p class="subtitle">Guarde nicks e referências de pagamento:</p>
-                <div id="pix-list" class="scroll-area">
-                    </div>
-                <button class="btn-next" onclick="showView('queda')">INICIAR COMPETIÇÃO <i class="ph-bold ph-play"></i></button>
-            </div>
-        </section>
-
-        <section id="view-queda" class="view">
-            <div class="motor-info-bar">
-                <div class="info-badge" id="round-label">QUEDA #1</div>
-                <div class="info-badge" id="limit-label">AGUARDANDO...</div>
-            </div>
-            
-            <div id="motor-container">
-                </div>
-
-            <div class="admin-tools-grid">
-                <button class="btn-tool" onclick="verHistorico()"><i class="ph-bold ph-clock-counter-clockwise"></i> LOGS</button>
-                <button class="btn-tool" onclick="recalcularTabela()"><i class="ph-bold ph-calculator"></i> RECALC</button>
-                <button class="btn-tool danger" onclick="limparQuedaAtual()"><i class="ph-bold ph-trash"></i> LIMPAR</button>
-            </div>
-
-            <button class="btn-finalize" onclick="finalizarQueda()">FINALIZAR QUEDA</button>
-
-            <div id="ranking-area" class="hidden">
-                <div id="capture-zone" class="ranking-visual">
-                    <div class="ranking-banner">
-                        <h4>RANKING ATUALIZADO</h4>
-                        <p id="rank-info-footer">DIÁRIA ASTRA ELITE</p>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="tabela-ranking">
-                            </table>
-                    </div>
-                </div>
-
-                <div class="sharing-grid">
-                    <button class="btn-share wa" onclick="copiarTexto()"><i class="ph-bold ph-whatsapp-logo"></i> TEXTO</button>
-                    <button class="btn-share camera" onclick="baixarPrint()"><i class="ph-bold ph-camera"></i> FOTO</button>
-                </div>
-            </div>
-        </section>
-
+    <!-- Estatísticas do Catálogo -->
+    <div class="stats" id="statsCounter">
+      Carregando catálogo de espécies...
     </div>
 
-    <div id="modal-historico" class="modal hidden">
-        <div class="modal-content card-main">
-            <h3 class="title-view">HISTÓRICO DE ROUNDS</h3>
-            <div id="log-content" class="scroll-area"></div>
-            <button class="btn-next" onclick="fecharModal()">FECHAR</button>
-        </div>
-    </div>
+    <!-- Container onde os cards do dados.json serão renderizados dinamicamente -->
+    <section class="grid" id="catalogGrid"></section>
 
-    <script src="script.js"></script>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; Catálogo de Biodiversidade de Guaíba/RS - Hospedado no GitHub Pages</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
